@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>School Settings - School Solution</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            background: #172033;
+            color: white;
+            padding: 20px 12px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo h2 {
+            font-size: 22px;
+        }
+
+        .logo p {
+            color: #b9c2d0;
+            margin-top: 5px;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin-bottom: 6px;
+        }
+
+        .menu a {
+            display: block;
+            color: #dce2eb;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 7px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #2d6cdf;
+            color: white;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            width: calc(100% - 240px);
+            padding: 30px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #ccd2da;
+            border-radius: 7px;
+            padding: 12px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #2d6cdf;
+        }
+
+        /* BUTTONS */
+        .buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-save {
+            background: #2d6cdf;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #1f56b8;
+        }
+
+        .btn-refresh {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-clear {
+            background: #dc3545;
+            color: white;
+        }
+
+        /* MESSAGE */
+        #message {
+            display: none;
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        /* PREVIEW */
+        .preview {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .preview h2 {
+            margin-bottom: 5px;
+        }
+
+        .preview .tigrinya {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .preview p {
+            color: #555;
+            margin: 5px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .main {
+                margin-left: 190px;
+                width: calc(100% - 190px);
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .layout {
+                display: block;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            <h2>School Solution</h2>
+            <p>መፍትሕ</p>
+        </div>
+
+        <ul class="menu">
+
+            <li>
+                <a href="index.html">🏠 Dashboard</a>
+            </li>
+
+            <li>
+                <a href="students.html">👨‍🎓 Students</a>
+            </li>
+
+            <li>
+                <a href="classes.html">🏫 Classes</a>
+            </li>
+
+            <li>
+                <a href="subjects.html">📚 Subjects</a>
+            </li>
+
+            <li>
+                <a href="teachers.html">👨‍🏫 Teachers</a>
+            </li>
+
+            <li>
+                <a href="marks.html">📝 Marks / Grades</a>
+            </li>
+
+            <li>
+                <a href="attendance.html">📅 Attendance</a>
+            </li>
+
+            <li>
+                <a href="fees.html">💰 Fees</a>
+            </li>
+
+            <li>
+                <a href="receipts.html">🧾 Receipts</a>
+            </li>
+
+            <li>
+                <a href="reports.html">📊 Reports</a>
+            </li>
+
+            <li>
+                <a href="settings.html" class="active">⚙️ School Settings</a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+        <div class="header">
+            <h1>⚙️ School Settings</h1>
+            <p>Manage your school information and official details.</p>
+        </div>
+
+
+        <!-- MESSAGE -->
+        <div id="message"></div>
+
+
+        <!-- SETTINGS FORM -->
+        <div class="card">
+
+            <h2>🏫 School Information</h2>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="schoolName">
+                        School Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="schoolName"
+                        placeholder="School Solution"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="schoolNameTigrinya">
+                        School Name (Tigrinya)
+                    </label>
+
+                    <input
+                        type="text"
+                        id="schoolNameTigrinya"
+                        placeholder="መፍትሕ"
+                    >
+                </div>
+
+
+                <div class="form-group full">
+                    <label for="address">
+                        Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        placeholder="Enter school address"
+                    ></textarea>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">
+                        Phone
+                    </label>
+
+                    <input
+                        type="text"
+                        id="phone"
+                        placeholder="+44..."
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="school@example.com"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="website">
+                        Website
+                    </label>
+
+                    <input
+                        type="text"
+                        id="website"
+                        placeholder="https://example.com"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="principalName">
+                        Principal / Head Teacher
+                    </label>
+
+                    <input
+                        type="text"
+                        id="principalName"
+                        placeholder="Enter principal name"
+                    >
+                </div>
+
+
+                <div class="form-group full">
+                    <label for="logoPath">
+                        Logo Path / URL
+                    </label>
+
+                    <input
+                        type="text"
+                        id="logoPath"
+                        placeholder="Logo file path or URL"
+                    >
+                </div>
+
+            </div>
+
+
+            <div class="buttons">
+
+                <button
+                    class="btn-save"
+                    onclick="saveSettings()">
+                    💾 Save Settings
+                </button>
+
+                <button
+                    class="btn-refresh"
+                    onclick="loadSettings()">
+                    🔄 Refresh
+                </button>
+
+                <button
+                    class="btn-clear"
+                    onclick="clearForm()">
+                    🗑️ Clear
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- PREVIEW -->
+        <div class="card">
+
+            <h2>👁️ School Preview</h2>
+
+            <div class="preview">
+
+                <h2 id="previewSchoolName">
+                    School Solution
+                </h2>
+
+                <div
+                    class="tigrinya"
+                    id="previewTigrinya">
+                    መፍትሕ
+                </div>
+
+                <p id="previewAddress">
+                    Address not set
+                </p>
+
+                <p id="previewPhone">
+                    Phone not set
+                </p>
+
+                <p id="previewEmail">
+                    Email not set
+                </p>
+
+                <p id="previewPrincipal">
+                    Principal not set
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+
+/* ================================
+   SHOW MESSAGE
+================================ */
+
+function showMessage(message, type = "success") {
+
+    const box = document.getElementById("message");
+
+    box.textContent = message;
+
+    box.className = type;
+
+    box.style.display = "block";
+
+    setTimeout(() => {
+        box.style.display = "none";
+    }, 4000);
+}
+
+
+/* ================================
+   LOAD SETTINGS
+================================ */
+
+async function loadSettings() {
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/settings/`
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load school settings."
+            );
+        }
+
+        const data = await response.json();
+
+
+        document.getElementById("schoolName").value =
+            data.school_name || "";
+
+        document.getElementById("schoolNameTigrinya").value =
+            data.school_name_tigrinya || "";
+
+        document.getElementById("address").value =
+            data.address || "";
+
+        document.getElementById("phone").value =
+            data.phone || "";
+
+        document.getElementById("email").value =
+            data.email || "";
+
+        document.getElementById("website").value =
+            data.website || "";
+
+        document.getElementById("principalName").value =
+            data.principal_name || "";
+
+        document.getElementById("logoPath").value =
+            data.logo_path || "";
+
+
+        updatePreview();
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ================================
+   SAVE SETTINGS
+================================ */
+
+async function saveSettings() {
+
+    const data = {
+
+        school_name:
+            document.getElementById(
+                "schoolName"
+            ).value.trim(),
+
+        school_name_tigrinya:
+            document.getElementById(
+                "schoolNameTigrinya"
+            ).value.trim(),
+
+        address:
+            document.getElementById(
+                "address"
+            ).value.trim(),
+
+        phone:
+            document.getElementById(
+                "phone"
+            ).value.trim(),
+
+        email:
+            document.getElementById(
+                "email"
+            ).value.trim(),
+
+        website:
+            document.getElementById(
+                "website"
+            ).value.trim(),
+
+        principal_name:
+            document.getElementById(
+                "principalName"
+            ).value.trim(),
+
+        logo_path:
+            document.getElementById(
+                "logoPath"
+            ).value.trim()
+    };
+
+
+    if (!data.school_name) {
+
+        showMessage(
+            "School name is required.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/settings/`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify(data)
+            }
+        );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Failed to save settings."
+            );
+        }
+
+
+        showMessage(
+            "School settings saved successfully!",
+            "success"
+        );
+
+
+        updatePreview();
+
+    } catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* ================================
+   CLEAR FORM
+================================ */
+
+function clearForm() {
+
+    document.getElementById(
+        "schoolName"
+    ).value = "";
+
+    document.getElementById(
+        "schoolNameTigrinya"
+    ).value = "";
+
+    document.getElementById(
+        "address"
+    ).value = "";
+
+    document.getElementById(
+        "phone"
+    ).value = "";
+
+    document.getElementById(
+        "email"
+    ).value = "";
+
+    document.getElementById(
+        "website"
+    ).value = "";
+
+    document.getElementById(
+        "principalName"
+    ).value = "";
+
+    document.getElementById(
+        "logoPath"
+    ).value = "";
+
+
+    updatePreview();
+}
+
+
+/* ================================
+   UPDATE PREVIEW
+================================ */
+
+function updatePreview() {
+
+    const schoolName =
+        document.getElementById(
+            "schoolName"
+        ).value.trim();
+
+    const tigrinya =
+        document.getElementById(
+            "schoolNameTigrinya"
+        ).value.trim();
+
+    const address =
+        document.getElementById(
+            "address"
+        ).value.trim();
+
+    const phone =
+        document.getElementById(
+            "phone"
+        ).value.trim();
+
+    const email =
+        document.getElementById(
+            "email"
+        ).value.trim();
+
+    const principal =
+        document.getElementById(
+            "principalName"
+        ).value.trim();
+
+
+    document.getElementById(
+        "previewSchoolName"
+    ).textContent =
+        schoolName || "School Solution";
+
+
+    document.getElementById(
+        "previewTigrinya"
+    ).textContent =
+        tigrinya || "መፍትሕ";
+
+
+    document.getElementById(
+        "previewAddress"
+    ).textContent =
+        address || "Address not set";
+
+
+    document.getElementById(
+        "previewPhone"
+    ).textContent =
+        phone || "Phone not set";
+
+
+    document.getElementById(
+        "previewEmail"
+    ).textContent =
+        email || "Email not set";
+
+
+    document.getElementById(
+        "previewPrincipal"
+    ).textContent =
+        principal ||
+        "Principal not set";
+}
+
+
+/* ================================
+   LIVE PREVIEW
+================================ */
+
+document
+    .querySelectorAll("input, textarea")
+    .forEach(element => {
+
+        element.addEventListener(
+            "input",
+            updatePreview
+        );
+
+    });
+
+
+/* ================================
+   START
+================================ */
+
+loadSettings();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Fees - School Solution / መፍትሕ</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+header {
+    background: #123b6d;
+    color: white;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header button {
+    background: white;
+    color: #123b6d;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 25px auto;
+    padding: 0 18px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
+
+h2 {
+    color: #123b6d;
+    margin-top: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+button {
+    border: none;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #123b6d;
+    color: white;
+}
+
+.success {
+    background: #198754;
+    color: white;
+}
+
+.warning {
+    background: #f0ad4e;
+    color: white;
+}
+
+.danger {
+    background: #dc3545;
+    color: white;
+}
+
+.secondary {
+    background: #64748b;
+    color: white;
+}
+
+.info {
+    background: #0ea5e9;
+    color: white;
+}
+
+.message {
+    display: none;
+    padding: 11px;
+    margin-top: 15px;
+    border-radius: 7px;
+}
+
+.message.ok {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.message.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+.tab-button.active {
+    background: #123b6d;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+th,
+td {
+    padding: 11px 9px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #eef4fb;
+    color: #123b6d;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.paid {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.unpaid {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.partially {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.active-badge {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.inactive-badge {
+    background: #e5e7eb;
+    color: #475569;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.stat {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+}
+
+.stat span {
+    display: block;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.stat strong {
+    display: block;
+    color: #123b6d;
+    font-size: 25px;
+    margin-top: 6px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100;
+}
+
+.modal-box {
+    background: white;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 22px;
+}
+
+.modal-box h3 {
+    color: #123b6d;
+    margin-top: 0;
+}
+
+.close {
+    float: right;
+    background: #dc3545;
+    color: white;
+}
+
+@media(max-width: 1000px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 600px) {
+    .grid,
+    .summary {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        💰 Fees & Payments / ክፍሊትን ክፍያን
+    </h1>
+
+    <button onclick="goDashboard()">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<div class="container">
+
+    <!-- TABS -->
+
+    <div class="tabs">
+
+        <button
+            class="tab-button active"
+            onclick="showTab('feesTab', this)"
+        >
+            💰 Fee Records
+        </button>
+
+        <button
+            class="tab-button"
+            onclick="showTab('typesTab', this)"
+        >
+            📋 Fee Types
+        </button>
+
+        <button
+            class="tab-button"
+            onclick="showTab('paymentsTab', this)"
+        >
+            💳 Payments
+        </button>
+
+        <button
+            class="tab-button"
+            onclick="showTab('summaryTab', this)"
+        >
+            📊 Student Summary
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         FEE RECORDS
+    ====================================================== -->
+
+    <div
+        id="feesTab"
+        class="tab-content active"
+    >
+
+        <!-- ADD / EDIT FEE -->
+
+        <div class="card">
+
+            <h2 id="feeFormTitle">
+                Assign Fee
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Student
+                    </label>
+
+                    <select id="feeStudent">
+
+                        <option value="">
+                            Select Student
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Fee Type
+                    </label>
+
+                    <select id="feeType">
+
+                        <option value="">
+                            Select Fee Type
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Academic Year
+                    </label>
+
+                    <input
+                        type="text"
+                        id="feeAcademicYear"
+                        placeholder="2026/2027"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Term
+                    </label>
+
+                    <input
+                        type="text"
+                        id="feeTerm"
+                        placeholder="Term 1"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Amount Due
+                    </label>
+
+                    <input
+                        type="number"
+                        id="amountDue"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary"
+                    onclick="saveFee()"
+                    id="saveFeeBtn"
+                >
+                    Assign Fee
+                </button>
+
+                <button
+                    class="warning"
+                    onclick="clearFeeForm()"
+                >
+                    Clear
+                </button>
+
+                <button
+                    class="secondary"
+                    onclick="loadAll()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="card">
+
+            <h2>
+                Fee Overview
+            </h2>
+
+            <div class="summary">
+
+                <div class="stat">
+
+                    <span>
+                        Total Fees
+                    </span>
+
+                    <strong id="totalFees">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Total Due
+                    </span>
+
+                    <strong id="totalDue">
+                        0.00
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Total Paid
+                    </span>
+
+                    <strong id="totalPaid">
+                        0.00
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Total Balance
+                    </span>
+
+                    <strong id="totalBalance">
+                        0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTER -->
+
+        <div class="card">
+
+            <h2>
+                Fee Records
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Student
+                    </label>
+
+                    <select id="filterStudent">
+
+                        <option value="">
+                            All Students
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Academic Year
+                    </label>
+
+                    <input
+                        type="text"
+                        id="filterYear"
+                        placeholder="2026/2027"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Term
+                    </label>
+
+                    <input
+                        type="text"
+                        id="filterTerm"
+                        placeholder="Term 1"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select id="filterStatus">
+
+                        <option value="">
+                            All Statuses
+                        </option>
+
+                        <option value="Paid">
+                            Paid
+                        </option>
+
+                        <option value="Partially Paid">
+                            Partially Paid
+                        </option>
+
+                        <option value="Unpaid">
+                            Unpaid
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary"
+                    onclick="loadFees()"
+                >
+                    Search
+                </button>
+
+                <button
+                    class="secondary"
+                    onclick="clearFeeFilters()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Student</th>
+
+                            <th>Student ID</th>
+
+                            <th>Fee Type</th>
+
+                            <th>Academic Year</th>
+
+                            <th>Term</th>
+
+                            <th>Amount Due</th>
+
+                            <th>Paid</th>
+
+                            <th>Balance</th>
+
+                            <th>Status</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="feeTable">
+
+                        <tr>
+
+                            <td colspan="11">
+                                Loading...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FEE TYPES
+    ====================================================== -->
+
+    <div
+        id="typesTab"
+        class="tab-content"
+    >
+
+        <div class="card">
+
+            <h2 id="typeFormTitle">
+                Add Fee Type
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Fee Type Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="typeName"
+                        placeholder="School Fees"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <input
+                        type="text"
+                        id="typeDescription"
+                        placeholder="Description"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Status
+                    </label>
+
+                    <select id="typeActive">
+
+                        <option value="true">
+                            Active
+                        </option>
+
+                        <option value="false">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary"
+                    id="saveTypeBtn"
+                    onclick="saveFeeType()"
+                >
+                    Add Fee Type
+                </button>
+
+                <button
+                    class="warning"
+                    onclick="clearTypeForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Fee Types
+            </h2>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="typeTable">
+
+                        <tr>
+
+                            <td colspan="5">
+                                Loading...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAYMENTS
+    ====================================================== -->
+
+    <div
+        id="paymentsTab"
+        class="tab-content"
+    >
+
+        <div class="card">
+
+            <h2>
+                Record Payment
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Fee Record
+                    </label>
+
+                    <select id="paymentFee">
+
+                        <option value="">
+                            Select Fee
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Amount
+                    </label>
+
+                    <input
+                        type="number"
+                        id="paymentAmount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="0.00"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Payment Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="paymentDate"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Payment Method
+                    </label>
+
+                    <select id="paymentMethod">
+
+                        <option value="Cash">
+                            Cash
+                        </option>
+
+                        <option value="Bank">
+                            Bank
+                        </option>
+
+                        <option value="Mobile Money">
+                            Mobile Money
+                        </option>
+
+                        <option value="Card">
+                            Card
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Reference
+                    </label>
+
+                    <input
+                        type="text"
+                        id="paymentReference"
+                        placeholder="Receipt/reference number"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Note
+                    </label>
+
+                    <input
+                        type="text"
+                        id="paymentNote"
+                        placeholder="Optional note"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="success"
+                    onclick="recordPayment()"
+                >
+                    Record Payment
+                </button>
+
+                <button
+                    class="warning"
+                    onclick="clearPaymentForm()"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h2>
+                Payment History
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Student
+                    </label>
+
+                    <select id="paymentFilterStudent">
+
+                        <option value="">
+                            All Students
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Fee Record
+                    </label>
+
+                    <select id="paymentFilterFee">
+
+                        <option value="">
+                            All Fees
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary"
+                    onclick="loadPayments()"
+                >
+                    Search
+                </button>
+
+                <button
+                    class="secondary"
+                    onclick="clearPaymentFilters()"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Student</th>
+                            <th>Fee ID</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Method</th>
+                            <th>Reference</th>
+                            <th>Note</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="paymentTable">
+
+                        <tr>
+
+                            <td colspan="8">
+                                Loading...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         STUDENT SUMMARY
+    ====================================================== -->
+
+    <div
+        id="summaryTab"
+        class="tab-content"
+    >
+
+        <div class="card">
+
+            <h2>
+                Student Fee Summary
+            </h2>
+
+            <div class="grid">
+
+                <div class="field">
+
+                    <label>
+                        Student
+                    </label>
+
+                    <select id="summaryStudent">
+
+                        <option value="">
+                            Select Student
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Academic Year
+                    </label>
+
+                    <input
+                        type="text"
+                        id="summaryYear"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Term
+                    </label>
+
+                    <input
+                        type="text"
+                        id="summaryTerm"
+                        placeholder="Optional"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="primary"
+                    onclick="loadStudentSummary()"
+                >
+                    View Summary
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="studentSummaryBox"
+            class="card"
+            style="display:none;"
+        >
+
+            <h2>
+                Summary
+            </h2>
+
+            <div class="summary">
+
+                <div class="stat">
+
+                    <span>
+                        Fee Count
+                    </span>
+
+                    <strong id="summaryFeeCount">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Total Due
+                    </span>
+
+                    <strong id="summaryDue">
+                        0.00
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Total Paid
+                    </span>
+
+                    <strong id="summaryPaid">
+                        0.00
+                    </strong>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <span>
+                        Balance
+                    </span>
+
+                    <strong id="summaryBalance">
+                        0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <span
+                    id="summaryStatus"
+                    class="badge"
+                ></span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     EDIT FEE TYPE MODAL
+====================================================== -->
+
+<div
+    id="typeModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <button
+            class="close"
+            onclick="closeTypeModal()"
+        >
+            X
+        </button>
+
+        <h3>
+            Edit Fee Type
+        </h3>
+
+        <input
+            type="hidden"
+            id="editTypeId"
+        >
+
+        <div class="field">
+
+            <label>
+                Name
+            </label>
+
+            <input
+                type="text"
+                id="editTypeName"
+            >
+
+        </div>
+
+        <br>
+
+        <div class="field">
+
+            <label>
+                Description
+            </label>
+
+            <textarea
+                id="editTypeDescription"
+            ></textarea>
+
+        </div>
+
+        <br>
+
+        <div class="field">
+
+            <label>
+                Status
+            </label>
+
+            <select id="editTypeActive">
+
+                <option value="true">
+                    Active
+                </option>
+
+                <option value="false">
+                    Inactive
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                onclick="updateFeeType()"
+            >
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =====================================================
+   API
+===================================================== */
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+let students = [];
+
+let feeTypes = [];
+
+let fees = [];
+
+let editingFeeId = null;
+
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+function goDashboard() {
+
+    window.location.href =
+        "dashboard.html";
+
+}
+
+
+
+/* =====================================================
+   API REQUEST
+===================================================== */
+
+async function apiRequest(
+    url,
+    options = {}
+) {
+
+    const response =
+        await fetch(
+            API_URL + url,
+            {
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    ...(options.headers || {})
+                },
+
+                ...options
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+
+    let data;
+
+
+    try {
+
+        data =
+            text
+                ? JSON.parse(text)
+                : null;
+
+    } catch {
+
+        data = text;
+
+    }
+
+
+    if (!response.ok) {
+
+        const detail =
+            data &&
+            data.detail
+                ? data.detail
+                : "Request failed.";
+
+        throw new Error(detail);
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    success = false
+) {
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+
+    box.textContent =
+        text;
+
+
+    box.className =
+        "message " +
+        (
+            success
+                ? "ok"
+                : "error"
+        );
+
+
+    setTimeout(() => {
+
+        box.className =
+            "message";
+
+    }, 5000);
+
+}
+
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+function showTab(
+    tabId,
+    button
+) {
+
+    document
+        .querySelectorAll(
+            ".tab-content"
+        )
+        .forEach(tab => {
+
+            tab.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .querySelectorAll(
+            ".tab-button"
+        )
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+
+    document
+        .getElementById(tabId)
+        .classList.add(
+            "active"
+        );
+
+
+    button.classList.add(
+        "active"
+    );
+
+
+    if (tabId === "paymentsTab") {
+
+        loadPaymentFeeDropdown();
+        loadPayments();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TODAY
+===================================================== */
+
+function today() {
+
+    return new Date()
+        .toISOString()
+        .slice(0, 10);
+
+}
+
+
+
+/* =====================================================
+   LOAD STUDENTS
+===================================================== */
+
+async function loadStudents() {
+
+    try {
+
+        students =
+            await apiRequest(
+                "/api/students/"
+            );
+
+
+        if (
+            !Array.isArray(
+                students
+            )
+        ) {
+
+            students = [];
+
+        }
+
+
+        const active =
+            students.filter(
+                s =>
+                    s.is_active !== false
+            );
+
+
+        const selects = [
+
+            "feeStudent",
+            "filterStudent",
+            "paymentFilterStudent",
+            "summaryStudent"
+
+        ];
+
+
+        selects.forEach(id => {
+
+            const select =
+                document.getElementById(id);
+
+
+            if (!select) return;
+
+
+            const first =
+                select.options[0]
+                    ? select.options[0].textContent
+                    : "Select Student";
+
+
+            select.innerHTML =
+                `<option value="">${first}</option>`;
+
+
+            active.forEach(s => {
+
+                const name =
+                    `${s.first_name || ""} ${s.last_name || ""}`
+                        .trim();
+
+
+                const label =
+                    `${name || "Unnamed"} (${s.student_id || s.id})`;
+
+
+                select.insertAdjacentHTML(
+
+                    "beforeend",
+
+                    `
+                    <option value="${s.id}">
+                        ${escapeHtml(label)}
+                    </option>
+                    `
+
+                );
+
+            });
+
+        });
+
+
+    } catch (error) {
+
+        showMessage(
+            "Could not load students: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   STUDENT NAME
+===================================================== */
+
+function studentName(id) {
+
+    const student =
+        students.find(
+            s =>
+                Number(s.id) ===
+                Number(id)
+        );
+
+
+    if (!student) {
+
+        return "Unknown Student";
+
+    }
+
+
+    return (
+        `${student.first_name || ""} ${student.last_name || ""}`
+            .trim()
+        || "Unnamed"
+    );
+
+}
+
+
+
+/* =====================================================
+   LOAD FEE TYPES
+===================================================== */
+
+async function loadFeeTypes() {
+
+    try {
+
+        feeTypes =
+            await apiRequest(
+                "/api/fees/types?active_only=true"
+            );
+
+
+        if (
+            !Array.isArray(
+                feeTypes
+            )
+        ) {
+
+            feeTypes = [];
+
+        }
+
+
+        const select =
+            document.getElementById(
+                "feeType"
+            );
+
+
+        select.innerHTML =
+            `
+            <option value="">
+                Select Fee Type
+            </option>
+            `;
+
+
+        feeTypes.forEach(type => {
+
+            select.insertAdjacentHTML(
+
+                "beforeend",
+
+                `
+                <option value="${type.id}">
+                    ${escapeHtml(type.name)}
+                </option>
+                `
+
+            );
+
+        });
+
+
+        renderFeeTypes();
+
+
+    } catch (error) {
+
+        showMessage(
+            "Could not load fee types: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER FEE TYPES
+===================================================== */
+
+async function renderFeeTypes() {
+
+    try {
+
+        const allTypes =
+            await apiRequest(
+                "/api/fees/types"
+            );
+
+
+        const body =
+            document.getElementById(
+                "typeTable"
+            );
+
+
+        if (!allTypes.length) {
+
+            body.innerHTML =
+                `
+                <tr>
+                    <td colspan="5">
+                        No fee types found.
+                    </td>
+                </tr>
+                `;
+
+            return;
+
+        }
+
+
+        body.innerHTML =
+            allTypes.map(type => {
+
+                return `
+                <tr>
+
+                    <td>
+                        ${type.id}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            type.name
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            type.description || ""
+                        )}
+                    </td>
+
+                    <td>
+
+                        ${
+                            type.is_active
+
+                            ? `
+                            <span class="badge active-badge">
+                                Active
+                            </span>
+                            `
+
+                            : `
+                            <span class="badge inactive-badge">
+                                Inactive
+                            </span>
+                            `
+                        }
+
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="warning"
+                            onclick="editFeeType(${type.id})"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            class="danger"
+                            onclick="deleteFeeType(${type.id})"
+                        >
+                            Delete
+                        </button>
+
+                    </td>
+
+                </tr>
+                `;
+
+            }).join("");
+
+
+    } catch (error) {
+
+        document.getElementById(
+            "typeTable"
+        ).innerHTML =
+            `
+            <tr>
+                <td colspan="5">
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </td>
+            </tr>
+            `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SAVE FEE TYPE
+===================================================== */
+
+async function saveFeeType() {
+
+    const name =
+        document.getElementById(
+            "typeName"
+        ).value.trim();
+
+
+    const description =
+        document.getElementById(
+            "typeDescription"
+        ).value.trim();
+
+
+    const is_active =
+        document.getElementById(
+            "typeActive"
+        ).value === "true";
+
+
+    if (!name) {
+
+        showMessage(
+            "Please enter a fee type name."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            "/api/fees/types",
+
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify({
+                        name,
+                        description,
+                        is_active
+                    })
+            }
+        );
+
+
+        showMessage(
+            "Fee type created successfully.",
+            true
+        );
+
+
+        clearTypeForm();
+
+        await loadFeeTypes();
+
+        await loadAll();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   EDIT FEE TYPE
+===================================================== */
+
+async function editFeeType(id) {
+
+    try {
+
+        const type =
+            await apiRequest(
+                `/api/fees/types/${id}`
+            );
+
+
+        document.getElementById(
+            "editTypeId"
+        ).value =
+            type.id;
+
+
+        document.getElementById(
+            "editTypeName"
+        ).value =
+            type.name;
+
+
+        document.getElementById(
+            "editTypeDescription"
+        ).value =
+            type.description || "";
+
+
+        document.getElementById(
+            "editTypeActive"
+        ).value =
+            String(
+                type.is_active
+            );
+
+
+        document.getElementById(
+            "typeModal"
+        ).style.display =
+            "flex";
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   UPDATE FEE TYPE
+===================================================== */
+
+async function updateFeeType() {
+
+    const id =
+        document.getElementById(
+            "editTypeId"
+        ).value;
+
+
+    const name =
+        document.getElementById(
+            "editTypeName"
+        ).value.trim();
+
+
+    const description =
+        document.getElementById(
+            "editTypeDescription"
+        ).value.trim();
+
+
+    const is_active =
+        document.getElementById(
+            "editTypeActive"
+        ).value === "true";
+
+
+    if (!name) {
+
+        alert(
+            "Fee type name is required."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/fees/types/${id}`,
+
+            {
+                method: "PUT",
+
+                body:
+                    JSON.stringify({
+                        name,
+                        description,
+                        is_active
+                    })
+            }
+        );
+
+
+        closeTypeModal();
+
+        showMessage(
+            "Fee type updated successfully.",
+            true
+        );
+
+
+        await loadFeeTypes();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DELETE FEE TYPE
+===================================================== */
+
+async function deleteFeeType(id) {
+
+    if (
+        !confirm(
+            "Delete/deactivate this fee type?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                `/api/fees/types/${id}`,
+
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        showMessage(
+            result.message ||
+            "Fee type deleted.",
+            true
+        );
+
+
+        await loadFeeTypes();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CLOSE TYPE MODAL
+===================================================== */
+
+function closeTypeModal() {
+
+    document.getElementById(
+        "typeModal"
+    ).style.display =
+        "none";
+
+}
+
+
+
+/* =====================================================
+   CLEAR TYPE FORM
+===================================================== */
+
+function clearTypeForm() {
+
+    document.getElementById(
+        "typeName"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "typeDescription"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "typeActive"
+    ).value =
+        "true";
+
+}
+
+
+
+/* =====================================================
+   SAVE FEE
+===================================================== */
+
+async function saveFee() {
+
+    const student_id =
+        document.getElementById(
+            "feeStudent"
+        ).value;
+
+
+    const fee_type_id =
+        document.getElementById(
+            "feeType"
+        ).value;
+
+
+    const academic_year =
+        document.getElementById(
+            "feeAcademicYear"
+        ).value.trim();
+
+
+    const term =
+        document.getElementById(
+            "feeTerm"
+        ).value.trim();
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "amountDue"
+            ).value
+        );
+
+
+    if (
+        !student_id ||
+        !fee_type_id ||
+        !academic_year ||
+        !term ||
+        Number.isNaN(amount)
+    ) {
+
+        showMessage(
+            "Please complete all fee fields."
+        );
+
+        return;
+
+    }
+
+
+    if (amount < 0) {
+
+        showMessage(
+            "Amount cannot be negative."
+        );
+
+        return;
+
+    }
+
+
+    const data = {
+
+        student_id:
+            Number(student_id),
+
+        fee_type_id:
+            Number(fee_type_id),
+
+        academic_year,
+
+        term,
+
+        amount_due:
+            amount
+
+    };
+
+
+    try {
+
+        if (editingFeeId) {
+
+            await apiRequest(
+                `/api/fees/${editingFeeId}`,
+
+                {
+                    method: "PUT",
+
+                    body:
+                        JSON.stringify({
+                            amount_due:
+                                amount,
+
+                            academic_year,
+
+                            term
+                        })
+                }
+            );
+
+
+            showMessage(
+                "Fee updated successfully.",
+                true
+            );
+
+        } else {
+
+            await apiRequest(
+                "/api/fees/",
+
+                {
+                    method: "POST",
+
+                    body:
+                        JSON.stringify(data)
+                }
+            );
+
+
+            showMessage(
+                "Fee assigned successfully.",
+                true
+            );
+
+        }
+
+
+        clearFeeForm();
+
+        await loadFees();
+
+        await loadPaymentFeeDropdown();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   EDIT FEE
+===================================================== */
+
+async function editFee(id) {
+
+    try {
+
+        const fee =
+            await apiRequest(
+                `/api/fees/${id}`
+            );
+
+
+        editingFeeId =
+            id;
+
+
+        document.getElementById(
+            "feeStudent"
+        ).value =
+            fee.student.id;
+
+
+        document.getElementById(
+            "feeType"
+        ).value =
+            fee.fee_type.id;
+
+
+        document.getElementById(
+            "feeAcademicYear"
+        ).value =
+            fee.academic_year;
+
+
+        document.getElementById(
+            "feeTerm"
+        ).value =
+            fee.term;
+
+
+        document.getElementById(
+            "amountDue"
+        ).value =
+            fee.amount_due;
+
+
+        document.getElementById(
+            "feeFormTitle"
+        ).textContent =
+            "Edit Fee";
+
+
+        document.getElementById(
+            "saveFeeBtn"
+        ).textContent =
+            "Update Fee";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DELETE FEE
+===================================================== */
+
+async function deleteFee(id) {
+
+    if (
+        !confirm(
+            "Delete this fee record?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const result =
+            await apiRequest(
+                `/api/fees/${id}`,
+
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        showMessage(
+            result.message ||
+            "Fee deleted successfully.",
+            true
+        );
+
+
+        await loadFees();
+
+        await loadPaymentFeeDropdown();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CLEAR FEE FORM
+===================================================== */
+
+function clearFeeForm() {
+
+    editingFeeId =
+        null;
+
+
+    document.getElementById(
+        "feeStudent"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "feeType"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "feeAcademicYear"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "feeTerm"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "amountDue"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "feeFormTitle"
+    ).textContent =
+        "Assign Fee";
+
+
+    document.getElementById(
+        "saveFeeBtn"
+    ).textContent =
+        "Assign Fee";
+
+}
+
+
+
+/* =====================================================
+   LOAD FEES
+===================================================== */
+
+async function loadFees() {
+
+    try {
+
+        const params =
+            new URLSearchParams();
+
+
+        const student =
+            document.getElementById(
+                "filterStudent"
+            ).value;
+
+
+        const year =
+            document.getElementById(
+                "filterYear"
+            ).value.trim();
+
+
+        const term =
+            document.getElementById(
+                "filterTerm"
+            ).value.trim();
+
+
+        const status =
+            document.getElementById(
+                "filterStatus"
+            ).value;
+
+
+        if (student)
+            params.set(
+                "student_id",
+                student
+            );
+
+
+        if (year)
+            params.set(
+                "academic_year",
+                year
+            );
+
+
+        if (term)
+            params.set(
+                "term",
+                term
+            );
+
+
+        if (status)
+            params.set(
+                "status",
+                status
+            );
+
+
+        const query =
+            params.toString();
+
+
+        fees =
+            await apiRequest(
+                "/api/fees/" +
+                (
+                    query
+                        ? "?" + query
+                        : ""
+                )
+            );
+
+
+        if (!Array.isArray(fees))
+            fees = [];
+
+
+        renderFees(
+            fees
+        );
+
+
+        updateFeeOverview(
+            fees
+        );
+
+
+    } catch (error) {
+
+        document.getElementById(
+            "feeTable"
+        ).innerHTML =
+            `
+            <tr>
+                <td colspan="11">
+                    Error:
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </td>
+            </tr>
+            `;
+
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   RENDER FEES
+===================================================== */
+
+function renderFees(records) {
+
+    const body =
+        document.getElementById(
+            "feeTable"
+        );
+
+
+    if (!records.length) {
+
+        body.innerHTML =
+            `
+            <tr>
+                <td colspan="11">
+                    No fee records found.
+                </td>
+            </tr>
+            `;
+
+        return;
+
+    }
+
+
+    body.innerHTML =
+        records.map(fee => {
+
+            let badgeClass =
+                "unpaid";
+
+
+            if (
+                fee.status === "Paid"
+            ) {
+
+                badgeClass =
+                    "paid";
+
+            } else if (
+                fee.status ===
+                "Partially Paid"
+            ) {
+
+                badgeClass =
+                    "partially";
+
+            }
+
+
+            return `
+            <tr>
+
+                <td>
+                    ${fee.id}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        fee.student?.name ||
+                        studentName(
+                            fee.student?.id
+                        )
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        fee.student?.student_id ||
+                        ""
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        fee.fee_type?.name ||
+                        ""
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        fee.academic_year
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        fee.term
+                    )}
+                </td>
+
+                <td>
+                    ${Number(
+                        fee.amount_due || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+                    ${Number(
+                        fee.amount_paid || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+                    ${Number(
+                        fee.balance || 0
+                    ).toFixed(2)}
+                </td>
+
+                <td>
+
+                    <span
+                        class="badge ${badgeClass}"
+                    >
+                        ${escapeHtml(
+                            fee.status
+                        )}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="warning"
+                        onclick="editFee(${fee.id})"
+                    >
+                        Edit
+                    </button>
+
+                    <button
+                        class="danger"
+                        onclick="deleteFee(${fee.id})"
+                    >
+                        Delete
+                    </button>
+
+                    <button
+                        class="success"
+                        onclick="openPayment(${fee.id})"
+                    >
+                        Pay
+                    </button>
+
+                </td>
+
+            </tr>
+            `;
+
+        }).join("");
+
+}
+
+
+
+/* =====================================================
+   OVERVIEW
+===================================================== */
+
+function updateFeeOverview(records) {
+
+    const totalDue =
+        records.reduce(
+            (
+                total,
+                fee
+            ) =>
+                total +
+                Number(
+                    fee.amount_due || 0
+                ),
+            0
+        );
+
+
+    const totalPaid =
+        records.reduce(
+            (
+                total,
+                fee
+            ) =>
+                total +
+                Number(
+                    fee.amount_paid || 0
+                ),
+            0
+        );
+
+
+    const totalBalance =
+        records.reduce(
+            (
+                total,
+                fee
+            ) =>
+                total +
+                Number(
+                    fee.balance || 0
+                ),
+            0
+        );
+
+
+    document.getElementById(
+        "totalFees"
+    ).textContent =
+        records.length;
+
+
+    document.getElementById(
+        "totalDue"
+    ).textContent =
+        totalDue.toFixed(2);
+
+
+    document.getElementById(
+        "totalPaid"
+    ).textContent =
+        totalPaid.toFixed(2);
+
+
+    document.getElementById(
+        "totalBalance"
+    ).textContent =
+        totalBalance.toFixed(2);
+
+}
+
+
+
+/* =====================================================
+   CLEAR FEE FILTERS
+===================================================== */
+
+function clearFeeFilters() {
+
+    document.getElementById(
+        "filterStudent"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "filterYear"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "filterTerm"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "filterStatus"
+    ).value =
+        "";
+
+
+    loadFees();
+
+}
+
+
+
+/* =====================================================
+   LOAD PAYMENT FEE DROPDOWN
+===================================================== */
+
+async function loadPaymentFeeDropdown() {
+
+    try {
+
+        const records =
+            await apiRequest(
+                "/api/fees/"
+            );
+
+
+        const selects = [
+
+            "paymentFee",
+            "paymentFilterFee"
+
+        ];
+
+
+        selects.forEach(id => {
+
+            const select =
+                document.getElementById(id);
+
+
+            const first =
+                id === "paymentFee"
+                    ? "Select Fee"
+                    : "All Fees";
+
+
+            select.innerHTML =
+                `
+                <option value="">
+                    ${first}
+                </option>
+                `;
+
+
+            records.forEach(fee => {
+
+                const student =
+                    fee.student?.name ||
+                    "Student";
+
+
+                const text =
+                    `${student} | ${fee.fee_type?.name || ""} | ${fee.term} | Balance: ${Number(fee.balance || 0).toFixed(2)}`;
+
+
+                select.insertAdjacentHTML(
+
+                    "beforeend",
+
+                    `
+                    <option value="${fee.id}">
+                        ${escapeHtml(text)}
+                    </option>
+                    `
+
+                );
+
+            });
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   OPEN PAYMENT
+===================================================== */
+
+async function openPayment(id) {
+
+    showTab(
+        "paymentsTab",
+        document.querySelectorAll(
+            ".tab-button"
+        )[2]
+    );
+
+
+    await loadPaymentFeeDropdown();
+
+
+    document.getElementById(
+        "paymentFee"
+    ).value =
+        String(id);
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* =====================================================
+   RECORD PAYMENT
+===================================================== */
+
+async function recordPayment() {
+
+    const fee_record_id =
+        document.getElementById(
+            "paymentFee"
+        ).value;
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "paymentAmount"
+            ).value
+        );
+
+
+    const payment_date =
+        document.getElementById(
+            "paymentDate"
+        ).value;
+
+
+    const payment_method =
+        document.getElementById(
+            "paymentMethod"
+        ).value;
+
+
+    const reference =
+        document.getElementById(
+            "paymentReference"
+        ).value.trim();
+
+
+    const note =
+        document.getElementById(
+            "paymentNote"
+        ).value.trim();
+
+
+    if (
+        !fee_record_id ||
+        !amount ||
+        amount <= 0 ||
+        !payment_date
+    ) {
+
+        showMessage(
+            "Please select a fee, enter a valid amount and payment date."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            "/api/fees/payments",
+
+            {
+                method: "POST",
+
+                body:
+                    JSON.stringify({
+
+                        fee_record_id:
+                            Number(
+                                fee_record_id
+                            ),
+
+                        amount,
+
+                        payment_date,
+
+                        payment_method,
+
+                        reference,
+
+                        note
+
+                    })
+            }
+        );
+
+
+        showMessage(
+            "Payment recorded successfully.",
+            true
+        );
+
+
+        clearPaymentForm();
+
+
+        await loadFees();
+
+        await loadPaymentFeeDropdown();
+
+        await loadPayments();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   CLEAR PAYMENT FORM
+===================================================== */
+
+function clearPaymentForm() {
+
+    document.getElementById(
+        "paymentFee"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "paymentAmount"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "paymentDate"
+    ).value =
+        today();
+
+
+    document.getElementById(
+        "paymentMethod"
+    ).value =
+        "Cash";
+
+
+    document.getElementById(
+        "paymentReference"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "paymentNote"
+    ).value =
+        "";
+
+}
+
+
+
+/* =====================================================
+   LOAD PAYMENTS
+===================================================== */
+
+async function loadPayments() {
+
+    try {
+
+        const params =
+            new URLSearchParams();
+
+
+        const student =
+            document.getElementById(
+                "paymentFilterStudent"
+            ).value;
+
+
+        const fee =
+            document.getElementById(
+                "paymentFilterFee"
+            ).value;
+
+
+        if (student) {
+
+            params.set(
+                "student_id",
+                student
+            );
+
+        }
+
+
+        if (fee) {
+
+            params.set(
+                "fee_record_id",
+                fee
+            );
+
+        }
+
+
+        const query =
+            params.toString();
+
+
+        const payments =
+            await apiRequest(
+                "/api/fees/payments/history" +
+                (
+                    query
+                        ? "?" + query
+                        : ""
+                )
+            );
+
+
+        const body =
+            document.getElementById(
+                "paymentTable"
+            );
+
+
+        if (!payments.length) {
+
+            body.innerHTML =
+                `
+                <tr>
+                    <td colspan="8">
+                        No payments found.
+                    </td>
+                </tr>
+                `;
+
+            return;
+
+        }
+
+
+        body.innerHTML =
+            payments.map(payment => {
+
+                return `
+                <tr>
+
+                    <td>
+                        ${payment.id}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            studentName(
+                                payment.student_id
+                            )
+                        )}
+                    </td>
+
+                    <td>
+                        ${payment.fee_record_id}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            payment.amount || 0
+                        ).toFixed(2)}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            payment.payment_date
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            payment.payment_method
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            payment.reference || ""
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            payment.note || ""
+                        )}
+                    </td>
+
+                </tr>
+                `;
+
+            }).join("");
+
+
+    } catch (error) {
+
+        document.getElementById(
+            "paymentTable"
+        ).innerHTML =
+            `
+            <tr>
+                <td colspan="8">
+                    ${escapeHtml(
+                        error.message
+                    )}
+                </td>
+            </tr>
+            `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PAYMENT FILTERS
+===================================================== */
+
+function clearPaymentFilters() {
+
+    document.getElementById(
+        "paymentFilterStudent"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "paymentFilterFee"
+    ).value =
+        "";
+
+
+    loadPayments();
+
+}
+
+
+
+/* =====================================================
+   STUDENT SUMMARY
+===================================================== */
+
+async function loadStudentSummary() {
+
+    const student =
+        document.getElementById(
+            "summaryStudent"
+        ).value;
+
+
+    const year =
+        document.getElementById(
+            "summaryYear"
+        ).value.trim();
+
+
+    const term =
+        document.getElementById(
+            "summaryTerm"
+        ).value.trim();
+
+
+    if (!student) {
+
+        alert(
+            "Please select a student."
+        );
+
+        return;
+
+    }
+
+
+    const params =
+        new URLSearchParams();
+
+
+    if (year)
+        params.set(
+            "academic_year",
+            year
+        );
+
+
+    if (term)
+        params.set(
+            "term",
+            term
+        );
+
+
+    try {
+
+        const query =
+            params.toString();
+
+
+        const data =
+            await apiRequest(
+                `/api/fees/student/${student}/summary` +
+                (
+                    query
+                        ? "?" + query
+                        : ""
+                )
+            );
+
+
+        document.getElementById(
+            "studentSummaryBox"
+        ).style.display =
+            "block";
+
+
+        document.getElementById(
+            "summaryFeeCount"
+        ).textContent =
+            data.fee_count;
+
+
+        document.getElementById(
+            "summaryDue"
+        ).textContent =
+            Number(
+                data.total_due || 0
+            ).toFixed(2);
+
+
+        document.getElementById(
+            "summaryPaid"
+        ).textContent =
+            Number(
+                data.total_paid || 0
+            ).toFixed(2);
+
+
+        document.getElementById(
+            "summaryBalance"
+        ).textContent =
+            Number(
+                data.total_balance || 0
+            ).toFixed(2);
+
+
+        const status =
+            document.getElementById(
+                "summaryStatus"
+            );
+
+
+        status.textContent =
+            data.status;
+
+
+        if (
+            data.status === "Paid"
+        ) {
+
+            status.className =
+                "badge paid";
+
+        } else if (
+            data.status ===
+            "Partially Paid"
+        ) {
+
+            status.className =
+                "badge partially";
+
+        } else {
+
+            status.className =
+                "badge unpaid";
+
+        }
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   LOAD EVERYTHING
+===================================================== */
+
+async function loadAll() {
+
+    await loadStudents();
+
+    await loadFeeTypes();
+
+    await loadFees();
+
+    await loadPaymentFeeDropdown();
+
+    await loadPayments();
+
+}
+
+
+
+/* =====================================================
+   PAGE START
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+
+    async () => {
+
+        document.getElementById(
+            "paymentDate"
+        ).value =
+            today();
+
+
+        await loadAll();
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>

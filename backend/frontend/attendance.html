@@ -1,0 +1,1811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Attendance - School Solution / መፍትሕ</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #1f2937;
+}
+
+/* HEADER */
+header {
+    background: #123b6d;
+    color: white;
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+header button {
+    background: white;
+    color: #123b6d;
+    border: 0;
+    border-radius: 7px;
+    padding: 9px 14px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1250px;
+    margin: 25px auto;
+    padding: 0 18px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
+
+h2 {
+    margin-top: 0;
+    color: #123b6d;
+}
+
+/* FORM */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    font-size: 14px;
+}
+
+textarea {
+    min-height: 75px;
+    resize: vertical;
+}
+
+/* BUTTONS */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+button {
+    border: 0;
+    border-radius: 7px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primary {
+    background: #123b6d;
+    color: white;
+}
+
+.success {
+    background: #198754;
+    color: white;
+}
+
+.warning {
+    background: #f0ad4e;
+    color: white;
+}
+
+.danger {
+    background: #dc3545;
+    color: white;
+}
+
+.secondary {
+    background: #64748b;
+    color: white;
+}
+
+/* FILTERS */
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr auto;
+    gap: 10px;
+    align-items: end;
+}
+
+/* TABLE */
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th,
+td {
+    padding: 11px 9px;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    background: #eef4fb;
+    color: #123b6d;
+}
+
+/* STATUS BADGES */
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.present {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.absent {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.late {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.excused {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* MESSAGE */
+.message {
+    padding: 10px;
+    border-radius: 7px;
+    margin-top: 12px;
+    display: none;
+}
+
+.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.ok {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* SUMMARY */
+.summary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+
+.stat {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+    padding: 15px;
+    text-align: center;
+}
+
+.stat strong {
+    display: block;
+    font-size: 23px;
+    color: #123b6d;
+    margin-top: 5px;
+}
+
+/* MODAL */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 20;
+}
+
+.modal-box {
+    background: white;
+    border-radius: 12px;
+    max-width: 650px;
+    width: 100%;
+    padding: 22px;
+}
+
+.modal-box h3 {
+    margin-top: 0;
+    color: #123b6d;
+}
+
+/* RESPONSIVE */
+@media(max-width: 900px) {
+
+    .grid,
+    .summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filters button {
+        width: 100%;
+    }
+}
+
+@media(max-width: 600px) {
+
+    .grid,
+    .summary,
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>
+        📅 Attendance / ኣብ መዓልቲ ተሳትፎ
+    </h1>
+
+    <button onclick="goDashboard()">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- =========================
+         MARK ATTENDANCE
+    ========================== -->
+
+    <div class="card">
+
+        <h2 id="formTitle">
+            Mark Attendance
+        </h2>
+
+        <div class="grid">
+
+            <!-- STUDENT -->
+            <div class="field">
+
+                <label>
+                    Student
+                </label>
+
+                <select id="student_id">
+
+                    <option value="">
+                        Select Student
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DATE -->
+            <div class="field">
+
+                <label>
+                    Attendance Date
+                </label>
+
+                <input
+                    type="date"
+                    id="attendance_date"
+                >
+
+            </div>
+
+
+            <!-- STATUS -->
+            <div class="field">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="status">
+
+                    <option value="Present">
+                        Present
+                    </option>
+
+                    <option value="Absent">
+                        Absent
+                    </option>
+
+                    <option value="Late">
+                        Late
+                    </option>
+
+                    <option value="Excused">
+                        Excused
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- NOTE -->
+            <div class="field">
+
+                <label>
+                    Note
+                </label>
+
+                <input
+                    type="text"
+                    id="note"
+                    maxlength="500"
+                    placeholder="Optional note"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="primary"
+                id="saveBtn"
+                onclick="saveAttendance()"
+            >
+                Mark Attendance
+            </button>
+
+            <button
+                class="warning"
+                onclick="clearForm()"
+            >
+                Clear
+            </button>
+
+            <button
+                class="secondary"
+                onclick="loadStudents()"
+            >
+                Refresh Students
+            </button>
+
+        </div>
+
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+    </div>
+
+
+
+    <!-- =========================
+         SUMMARY
+    ========================== -->
+
+    <div class="card">
+
+        <h2>
+            Attendance Summary
+        </h2>
+
+        <div class="summary">
+
+            <div class="stat">
+                Total
+                <strong id="totalCount">
+                    0
+                </strong>
+            </div>
+
+            <div class="stat">
+                Present
+                <strong id="presentCount">
+                    0
+                </strong>
+            </div>
+
+            <div class="stat">
+                Absent
+                <strong id="absentCount">
+                    0
+                </strong>
+            </div>
+
+            <div class="stat">
+                Late
+                <strong id="lateCount">
+                    0
+                </strong>
+            </div>
+
+            <div class="stat">
+                Excused
+                <strong id="excusedCount">
+                    0
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         ATTENDANCE RECORDS
+    ========================== -->
+
+    <div class="card">
+
+        <h2>
+            Attendance Records
+        </h2>
+
+
+        <!-- FILTERS -->
+
+        <div class="filters">
+
+            <div class="field">
+
+                <label>
+                    Student
+                </label>
+
+                <select id="filterStudent">
+
+                    <option value="">
+                        All Students
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="filterDate"
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="filterStatus">
+
+                    <option value="">
+                        All Statuses
+                    </option>
+
+                    <option value="Present">
+                        Present
+                    </option>
+
+                    <option value="Absent">
+                        Absent
+                    </option>
+
+                    <option value="Late">
+                        Late
+                    </option>
+
+                    <option value="Excused">
+                        Excused
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="primary"
+                onclick="loadAttendance()"
+            >
+                Search
+            </button>
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="secondary"
+                onclick="clearFilters()"
+            >
+                Refresh / Clear Filters
+            </button>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            ID
+                        </th>
+
+                        <th>
+                            Student
+                        </th>
+
+                        <th>
+                            Student ID
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Note
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="attendanceTable">
+
+                    <tr>
+
+                        <td colspan="7">
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     SUMMARY MODAL
+========================== -->
+
+<div
+    class="modal"
+    id="summaryModal"
+>
+
+    <div class="modal-box">
+
+        <h3>
+            Student Attendance Summary
+        </h3>
+
+        <div id="summaryContent">
+            Loading...
+        </div>
+
+        <div class="actions">
+
+            <button
+                class="secondary"
+                onclick="closeSummary()"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script>
+
+/* =========================================
+   API
+========================================= */
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+let editingId = null;
+
+let students = [];
+
+
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+function goDashboard() {
+
+    window.location.href =
+        "dashboard.html";
+
+}
+
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showMessage(text, ok = false) {
+
+    const el =
+        document.getElementById("message");
+
+    el.textContent = text;
+
+    el.className =
+        "message " +
+        (ok ? "ok" : "error");
+
+    setTimeout(() => {
+
+        el.className = "message";
+
+    }, 4500);
+
+}
+
+
+
+/* =========================================
+   API REQUEST
+========================================= */
+
+async function apiRequest(
+    url,
+    options = {}
+) {
+
+    const response =
+        await fetch(
+            API_URL + url,
+            {
+                headers: {
+                    "Content-Type":
+                        "application/json",
+
+                    ...(options.headers || {})
+                },
+
+                ...options
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+
+    let data = null;
+
+
+    try {
+
+        data =
+            text
+                ? JSON.parse(text)
+                : null;
+
+    } catch (e) {
+
+        data = text;
+
+    }
+
+
+    if (!response.ok) {
+
+        const detail =
+            data &&
+            data.detail
+                ? data.detail
+                : "Request failed.";
+
+        throw new Error(detail);
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =========================================
+   TODAY
+========================================= */
+
+function today() {
+
+    return new Date()
+        .toISOString()
+        .slice(0, 10);
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+
+/* =========================================
+   LOAD STUDENTS
+========================================= */
+
+async function loadStudents() {
+
+    try {
+
+        students =
+            await apiRequest(
+                "/api/students/"
+            );
+
+
+        if (!Array.isArray(students)) {
+
+            students = [];
+
+        }
+
+
+        const active =
+            students.filter(
+                s =>
+                    s.is_active !== false
+            );
+
+
+        const main =
+            document.getElementById(
+                "student_id"
+            );
+
+
+        const filter =
+            document.getElementById(
+                "filterStudent"
+            );
+
+
+        const oldMain =
+            main.value;
+
+
+        const oldFilter =
+            filter.value;
+
+
+        main.innerHTML =
+            `
+            <option value="">
+                Select Student
+            </option>
+            `;
+
+
+        filter.innerHTML =
+            `
+            <option value="">
+                All Students
+            </option>
+            `;
+
+
+        active.forEach(s => {
+
+            const name =
+                `${s.first_name || ""} ${s.last_name || ""}`
+                    .trim();
+
+
+            const label =
+                `${name || "Unnamed"} (${s.student_id || s.id})`;
+
+
+            main.insertAdjacentHTML(
+                "beforeend",
+
+                `
+                <option value="${s.id}">
+                    ${escapeHtml(label)}
+                </option>
+                `
+            );
+
+
+            filter.insertAdjacentHTML(
+                "beforeend",
+
+                `
+                <option value="${s.id}">
+                    ${escapeHtml(label)}
+                </option>
+                `
+            );
+
+        });
+
+
+        if (
+            [...main.options]
+                .some(
+                    o =>
+                        o.value === oldMain
+                )
+        ) {
+
+            main.value =
+                oldMain;
+
+        }
+
+
+        if (
+            [...filter.options]
+                .some(
+                    o =>
+                        o.value === oldFilter
+                )
+        ) {
+
+            filter.value =
+                oldFilter;
+
+        }
+
+
+    } catch (error) {
+
+        showMessage(
+            "Could not load students: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   FIND STUDENT
+========================================= */
+
+function studentById(id) {
+
+    return students.find(
+        s =>
+            Number(s.id) ===
+            Number(id)
+    );
+
+}
+
+
+
+/* =========================================
+   STUDENT NAME
+========================================= */
+
+function studentName(id) {
+
+    const s =
+        studentById(id);
+
+
+    if (!s) {
+
+        return "Unknown Student";
+
+    }
+
+
+    return (
+        `${s.first_name || ""} ${s.last_name || ""}`
+            .trim()
+        || "Unnamed"
+    );
+
+}
+
+
+
+/* =========================================
+   STATUS BADGE
+========================================= */
+
+function statusBadge(status) {
+
+    const cls =
+        (status || "").toLowerCase();
+
+
+    return `
+        <span class="badge ${cls}">
+            ${escapeHtml(status)}
+        </span>
+    `;
+
+}
+
+
+
+/* =========================================
+   LOAD ATTENDANCE
+========================================= */
+
+async function loadAttendance() {
+
+    const params =
+        new URLSearchParams();
+
+
+    const student =
+        document.getElementById(
+            "filterStudent"
+        ).value;
+
+
+    const date =
+        document.getElementById(
+            "filterDate"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "filterStatus"
+        ).value;
+
+
+    if (student) {
+
+        params.set(
+            "student_id",
+            student
+        );
+
+    }
+
+
+    if (date) {
+
+        params.set(
+            "attendance_date",
+            date
+        );
+
+    }
+
+
+    if (status) {
+
+        params.set(
+            "status",
+            status
+        );
+
+    }
+
+
+    try {
+
+        const query =
+            params.toString();
+
+
+        const records =
+            await apiRequest(
+                "/api/attendance/" +
+                (
+                    query
+                        ? "?" + query
+                        : ""
+                )
+            );
+
+
+        renderAttendance(
+            records || []
+        );
+
+
+    } catch (error) {
+
+        document.getElementById(
+            "attendanceTable"
+        ).innerHTML =
+            `
+            <tr>
+                <td colspan="7">
+                    Error:
+                    ${escapeHtml(error.message)}
+                </td>
+            </tr>
+            `;
+
+
+        showMessage(
+            "Could not load attendance: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   RENDER ATTENDANCE
+========================================= */
+
+function renderAttendance(records) {
+
+    const body =
+        document.getElementById(
+            "attendanceTable"
+        );
+
+
+    if (!records.length) {
+
+        body.innerHTML =
+            `
+            <tr>
+                <td colspan="7">
+                    No attendance records found.
+                </td>
+            </tr>
+            `;
+
+    } else {
+
+        body.innerHTML =
+            records
+                .map(r => {
+
+                    return `
+                    <tr>
+
+                        <td>
+                            ${r.id}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                studentName(
+                                    r.student_id
+                                )
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                studentById(
+                                    r.student_id
+                                )?.student_id
+                                ||
+                                r.student_id
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                r.attendance_date
+                            )}
+                        </td>
+
+                        <td>
+                            ${statusBadge(
+                                r.status
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                r.note || ""
+                            )}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="warning"
+                                onclick="editAttendance(${r.id})"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                class="danger"
+                                onclick="deleteAttendance(${r.id})"
+                            >
+                                Delete
+                            </button>
+
+                            <button
+                                class="secondary"
+                                onclick="viewSummary(${r.student_id})"
+                            >
+                                Summary
+                            </button>
+
+                        </td>
+
+                    </tr>
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    updateCounts(records);
+
+}
+
+
+
+/* =========================================
+   COUNTS
+========================================= */
+
+function updateCounts(records) {
+
+    document.getElementById(
+        "totalCount"
+    ).textContent =
+        records.length;
+
+
+    document.getElementById(
+        "presentCount"
+    ).textContent =
+        records.filter(
+            r =>
+                r.status === "Present"
+        ).length;
+
+
+    document.getElementById(
+        "absentCount"
+    ).textContent =
+        records.filter(
+            r =>
+                r.status === "Absent"
+        ).length;
+
+
+    document.getElementById(
+        "lateCount"
+    ).textContent =
+        records.filter(
+            r =>
+                r.status === "Late"
+        ).length;
+
+
+    document.getElementById(
+        "excusedCount"
+    ).textContent =
+        records.filter(
+            r =>
+                r.status === "Excused"
+        ).length;
+
+}
+
+
+
+/* =========================================
+   SAVE / UPDATE
+========================================= */
+
+async function saveAttendance() {
+
+    const student_id =
+        document.getElementById(
+            "student_id"
+        ).value;
+
+
+    const attendance_date =
+        document.getElementById(
+            "attendance_date"
+        ).value;
+
+
+    const status =
+        document.getElementById(
+            "status"
+        ).value;
+
+
+    const note =
+        document.getElementById(
+            "note"
+        ).value.trim();
+
+
+    if (
+        !student_id ||
+        !attendance_date ||
+        !status
+    ) {
+
+        showMessage(
+            "Please select a student, date and status."
+        );
+
+        return;
+
+    }
+
+
+    const payload = {
+
+        student_id:
+            Number(student_id),
+
+        attendance_date,
+
+        status,
+
+        note
+
+    };
+
+
+    try {
+
+        if (editingId) {
+
+            await apiRequest(
+                `/api/attendance/${editingId}`,
+
+                {
+                    method: "PUT",
+
+                    body:
+                        JSON.stringify({
+                            attendance_date,
+                            status,
+                            note
+                        })
+                }
+            );
+
+
+            showMessage(
+                "Attendance updated successfully.",
+                true
+            );
+
+
+        } else {
+
+            await apiRequest(
+                "/api/attendance/",
+
+                {
+                    method: "POST",
+
+                    body:
+                        JSON.stringify(
+                            payload
+                        )
+                }
+            );
+
+
+            showMessage(
+                "Attendance marked successfully.",
+                true
+            );
+
+        }
+
+
+        clearForm();
+
+        await loadAttendance();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   EDIT
+========================================= */
+
+async function editAttendance(id) {
+
+    try {
+
+        const r =
+            await apiRequest(
+                `/api/attendance/${id}`
+            );
+
+
+        editingId =
+            id;
+
+
+        document.getElementById(
+            "student_id"
+        ).value =
+            String(
+                r.student_id
+            );
+
+
+        document.getElementById(
+            "attendance_date"
+        ).value =
+            r.attendance_date;
+
+
+        document.getElementById(
+            "status"
+        ).value =
+            r.status;
+
+
+        document.getElementById(
+            "note"
+        ).value =
+            r.note || "";
+
+
+        document.getElementById(
+            "formTitle"
+        ).textContent =
+            "Edit Attendance";
+
+
+        document.getElementById(
+            "saveBtn"
+        ).textContent =
+            "Update Attendance";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+async function deleteAttendance(id) {
+
+    if (
+        !confirm(
+            "Delete this attendance record?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/attendance/${id}`,
+
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        showMessage(
+            "Attendance deleted successfully.",
+            true
+        );
+
+
+        await loadAttendance();
+
+
+    } catch (error) {
+
+        showMessage(
+            error.message
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   STUDENT SUMMARY
+========================================= */
+
+async function viewSummary(studentId) {
+
+    const modal =
+        document.getElementById(
+            "summaryModal"
+        );
+
+
+    const content =
+        document.getElementById(
+            "summaryContent"
+        );
+
+
+    modal.style.display =
+        "flex";
+
+
+    content.innerHTML =
+        "Loading...";
+
+
+    try {
+
+        const data =
+            await apiRequest(
+                `/api/attendance/student/${studentId}/summary`
+            );
+
+
+        content.innerHTML =
+            `
+            <p>
+                <strong>Student:</strong>
+                ${escapeHtml(
+                    data.student.first_name +
+                    " " +
+                    data.student.last_name
+                )}
+            </p>
+
+            <p>
+                <strong>Student ID:</strong>
+                ${escapeHtml(
+                    data.student.student_id
+                )}
+            </p>
+
+            <div class="summary">
+
+                <div class="stat">
+                    Total
+                    <strong>
+                        ${data.total_days}
+                    </strong>
+                </div>
+
+                <div class="stat">
+                    Present
+                    <strong>
+                        ${data.present_days}
+                    </strong>
+                </div>
+
+                <div class="stat">
+                    Absent
+                    <strong>
+                        ${data.absent_days}
+                    </strong>
+                </div>
+
+                <div class="stat">
+                    Late
+                    <strong>
+                        ${data.late_days}
+                    </strong>
+                </div>
+
+                <div class="stat">
+                    Excused
+                    <strong>
+                        ${data.excused_days}
+                    </strong>
+                </div>
+
+            </div>
+
+            <p>
+                <strong>
+                    Attendance Percentage:
+                </strong>
+
+                ${data.attendance_percentage}%
+            </p>
+            `;
+
+
+    } catch (error) {
+
+        content.innerHTML =
+            `
+            <p>
+                ${escapeHtml(
+                    error.message
+                )}
+            </p>
+            `;
+
+    }
+
+}
+
+
+
+/* =========================================
+   CLOSE SUMMARY
+========================================= */
+
+function closeSummary() {
+
+    document.getElementById(
+        "summaryModal"
+    ).style.display =
+        "none";
+
+}
+
+
+
+/* =========================================
+   CLEAR FORM
+========================================= */
+
+function clearForm() {
+
+    editingId = null;
+
+
+    document.getElementById(
+        "student_id"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "attendance_date"
+    ).value =
+        today();
+
+
+    document.getElementById(
+        "status"
+    ).value =
+        "Present";
+
+
+    document.getElementById(
+        "note"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "formTitle"
+    ).textContent =
+        "Mark Attendance";
+
+
+    document.getElementById(
+        "saveBtn"
+    ).textContent =
+        "Mark Attendance";
+
+}
+
+
+
+/* =========================================
+   CLEAR FILTERS
+========================================= */
+
+function clearFilters() {
+
+    document.getElementById(
+        "filterStudent"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "filterDate"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "filterStatus"
+    ).value =
+        "";
+
+
+    loadAttendance();
+
+}
+
+
+
+/* =========================================
+   PAGE START
+========================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+
+    async () => {
+
+        document.getElementById(
+            "attendance_date"
+        ).value =
+            today();
+
+
+        await loadStudents();
+
+
+        await loadAttendance();
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>

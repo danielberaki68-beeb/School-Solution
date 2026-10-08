@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teachers - School Solution</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+.container {
+    width: 100%;
+    padding: 25px;
+}
+
+.header {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.header h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    color: #777;
+}
+
+button {
+    border: none;
+    padding: 11px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.back-btn {
+    background: #333;
+    color: white;
+}
+
+.toolbar {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.toolbar input {
+    flex: 1;
+    min-width: 250px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.toolbar select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.add-btn {
+    background: #198754;
+    color: white;
+}
+
+.refresh-btn {
+    background: #0d6efd;
+    color: white;
+}
+
+.form-card {
+    display: none;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.form-card.active {
+    display: block;
+}
+
+.form-card h2 {
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input,
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+.form-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.save-btn {
+    background: #198754;
+    color: white;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.table-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 950px;
+}
+
+th,
+td {
+    padding: 13px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+th {
+    background: #f8f9fa;
+}
+
+tr:hover {
+    background: #fafafa;
+}
+
+.actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.view-btn {
+    background: #0dcaf0;
+}
+
+.edit-btn {
+    background: #ffc107;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 7px;
+    margin-bottom: 15px;
+    display: none;
+    white-space: pre-line;
+}
+
+.success {
+    display: block;
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.error {
+    display: block;
+    background: #f8d7da;
+    color: #842029;
+}
+
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+    padding: 30px;
+}
+
+.modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 650px;
+    border-radius: 12px;
+    padding: 25px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.detail-row {
+    padding: 13px;
+    border-bottom: 1px solid #eee;
+}
+
+.detail-row strong {
+    display: inline-block;
+    min-width: 170px;
+}
+
+@media (max-width: 700px) {
+
+    .container {
+        padding: 10px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+            <h1>👨‍🏫 Teachers</h1>
+            <p>Manage teacher records</p>
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="goDashboard()"
+        >
+            ← Dashboard
+        </button>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search teacher ID, name, phone, email..."
+            oninput="filterTeachers()"
+        >
+
+        <select
+            id="specializationFilter"
+            onchange="filterTeachers()"
+        >
+
+            <option value="">
+                All Specializations
+            </option>
+
+        </select>
+
+        <button
+            class="add-btn"
+            onclick="openAddForm()"
+        >
+            ➕ Add Teacher
+        </button>
+
+        <button
+            class="refresh-btn"
+            onclick="loadTeachers()"
+        >
+            🔄 Refresh
+        </button>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div
+        id="message"
+        class="message"
+    ></div>
+
+
+    <!-- FORM -->
+
+    <div
+        id="formCard"
+        class="form-card"
+    >
+
+        <h2 id="formTitle">
+            Add Teacher
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <div class="form-group">
+
+                <label>
+                    Teacher ID *
+                </label>
+
+                <input
+                    type="text"
+                    id="teacherId"
+                    placeholder="Example: TCH001"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    First Name *
+                </label>
+
+                <input
+                    type="text"
+                    id="firstName"
+                    placeholder="First name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Last Name
+                </label>
+
+                <input
+                    type="text"
+                    id="lastName"
+                    placeholder="Last name"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Phone
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    placeholder="Phone number"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email address"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Specialization
+                </label>
+
+                <input
+                    type="text"
+                    id="specialization"
+                    placeholder="Example: Mathematics"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    User ID
+                </label>
+
+                <input
+                    type="number"
+                    id="userId"
+                    placeholder="Optional user ID"
+                    min="1"
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                class="save-btn"
+                onclick="saveTeacher()"
+            >
+                💾 Save Teacher
+            </button>
+
+            <button
+                class="cancel-btn"
+                onclick="closeForm()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Teacher ID</th>
+
+                    <th>Name</th>
+
+                    <th>Phone</th>
+
+                    <th>Email</th>
+
+                    <th>Specialization</th>
+
+                    <th>User ID</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="teachersTable">
+
+                <tr>
+
+                    <td
+                        colspan="8"
+                        class="empty"
+                    >
+                        Loading teachers...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- VIEW MODAL -->
+
+<div
+    id="viewModal"
+    class="modal"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>
+                Teacher Details
+            </h2>
+
+            <button
+                class="close-btn"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div id="teacherDetails"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+let teachers = [];
+
+let editingId = null;
+
+
+// ======================================================
+// START
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadTeachers();
+
+    }
+);
+
+
+// ======================================================
+// DASHBOARD
+// ======================================================
+
+function goDashboard() {
+
+    window.location.href =
+        "dashboard.html";
+
+}
+
+
+// ======================================================
+// LOAD TEACHERS
+// ======================================================
+
+async function loadTeachers() {
+
+    const table =
+        document.getElementById(
+            "teachersTable"
+        );
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="8" class="empty">
+                Loading teachers...
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/teachers/`
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to load teachers."
+            );
+
+        }
+
+
+        teachers = result;
+
+        buildSpecializationFilter();
+
+        renderTeachers(teachers);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty"
+                >
+                    ❌ ${escapeHtml(
+                        error.message
+                    )}
+                </td>
+            </tr>
+        `;
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// SPECIALIZATION FILTER
+// ======================================================
+
+function buildSpecializationFilter() {
+
+    const select =
+        document.getElementById(
+            "specializationFilter"
+        );
+
+
+    const current =
+        select.value;
+
+
+    const specializations =
+        [
+            ...new Set(
+                teachers
+                    .map(
+                        teacher =>
+                            (
+                                teacher.specialization ||
+                                ""
+                            ).trim()
+                    )
+                    .filter(Boolean)
+            )
+        ]
+        .sort();
+
+
+    select.innerHTML = `
+        <option value="">
+            All Specializations
+        </option>
+    `;
+
+
+    specializations.forEach(
+        function (specialization) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                specialization;
+
+            option.textContent =
+                specialization;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        specializations.includes(
+            current
+        )
+    ) {
+
+        select.value =
+            current;
+
+    }
+
+}
+
+
+// ======================================================
+// RENDER TEACHERS
+// ======================================================
+
+function renderTeachers(data) {
+
+    const table =
+        document.getElementById(
+            "teachersTable"
+        );
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        table.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty"
+                >
+                    No teachers found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML =
+        data.map(
+            function (teacher) {
+
+                const fullName =
+                    `${teacher.first_name || ""} ${teacher.last_name || ""}`
+                    .trim();
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+                            ${teacher.id}
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${escapeHtml(
+                                    teacher.teacher_id
+                                )}
+                            </strong>
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                fullName
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                teacher.phone || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                teacher.email || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(
+                                teacher.specialization || "-"
+                            )}
+                        </td>
+
+                        <td>
+                            ${
+                                teacher.user_id ??
+                                "-"
+                            }
+                        </td>
+
+                        <td>
+
+                            <div class="actions">
+
+                                <button
+                                    class="view-btn"
+                                    onclick="viewTeacher(${teacher.id})"
+                                >
+                                    👁 View
+                                </button>
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="editTeacher(${teacher.id})"
+                                >
+                                    ✏️ Edit
+                                </button>
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteTeacher(${teacher.id})"
+                                >
+                                    🗑 Delete
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        ).join("");
+
+}
+
+
+// ======================================================
+// SEARCH / FILTER
+// ======================================================
+
+function filterTeachers() {
+
+    const search =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const specialization =
+        document
+            .getElementById(
+                "specializationFilter"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const filtered =
+        teachers.filter(
+            function (teacher) {
+
+                const fullName =
+                    `${teacher.first_name || ""} ${teacher.last_name || ""}`;
+
+
+                const matchesSearch =
+                    !search ||
+
+                    String(
+                        teacher.id || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        teacher.teacher_id || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    fullName
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    String(
+                        teacher.phone || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        teacher.email || ""
+                    )
+                    .toLowerCase()
+                    .includes(search)
+
+                    ||
+
+                    String(
+                        teacher.specialization || ""
+                    )
+                    .toLowerCase()
+                    .includes(search);
+
+
+                const matchesSpecialization =
+                    !specialization ||
+
+                    String(
+                        teacher.specialization || ""
+                    )
+                    .toLowerCase() ===
+                    specialization;
+
+
+                return (
+                    matchesSearch &&
+                    matchesSpecialization
+                );
+
+            }
+        );
+
+
+    renderTeachers(filtered);
+
+}
+
+
+// ======================================================
+// OPEN ADD FORM
+// ======================================================
+
+function openAddForm() {
+
+    editingId = null;
+
+    document.getElementById(
+        "formTitle"
+    ).textContent =
+        "Add Teacher";
+
+
+    clearForm();
+
+
+    document.getElementById(
+        "teacherId"
+    ).disabled = false;
+
+
+    document.getElementById(
+        "formCard"
+    ).classList.add(
+        "active"
+    );
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ======================================================
+// CLEAR FORM
+// ======================================================
+
+function clearForm() {
+
+    document.getElementById(
+        "teacherId"
+    ).value = "";
+
+    document.getElementById(
+        "firstName"
+    ).value = "";
+
+    document.getElementById(
+        "lastName"
+    ).value = "";
+
+    document.getElementById(
+        "phone"
+    ).value = "";
+
+    document.getElementById(
+        "email"
+    ).value = "";
+
+    document.getElementById(
+        "specialization"
+    ).value = "";
+
+    document.getElementById(
+        "userId"
+    ).value = "";
+
+}
+
+
+// ======================================================
+// CLOSE FORM
+// ======================================================
+
+function closeForm() {
+
+    editingId = null;
+
+    document.getElementById(
+        "teacherId"
+    ).disabled = false;
+
+    document.getElementById(
+        "formCard"
+    ).classList.remove(
+        "active"
+    );
+
+}
+
+
+// ======================================================
+// SAVE TEACHER
+// ======================================================
+
+async function saveTeacher() {
+
+    const teacherId =
+        document
+            .getElementById(
+                "teacherId"
+            )
+            .value
+            .trim();
+
+
+    const firstName =
+        document
+            .getElementById(
+                "firstName"
+            )
+            .value
+            .trim();
+
+
+    const lastName =
+        document
+            .getElementById(
+                "lastName"
+            )
+            .value
+            .trim();
+
+
+    const phone =
+        document
+            .getElementById(
+                "phone"
+            )
+            .value
+            .trim();
+
+
+    const email =
+        document
+            .getElementById(
+                "email"
+            )
+            .value
+            .trim();
+
+
+    const specialization =
+        document
+            .getElementById(
+                "specialization"
+            )
+            .value
+            .trim();
+
+
+    const userIdValue =
+        document
+            .getElementById(
+                "userId"
+            )
+            .value
+            .trim();
+
+
+    if (!editingId && !teacherId) {
+
+        showMessage(
+            "Teacher ID is required.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!firstName) {
+
+        showMessage(
+            "First name is required.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const data = {
+
+        first_name:
+            firstName,
+
+        last_name:
+            lastName,
+
+        phone:
+            phone,
+
+        email:
+            email,
+
+        specialization:
+            specialization,
+
+        user_id:
+            userIdValue
+                ? Number(userIdValue)
+                : null
+
+    };
+
+
+    try {
+
+        let response;
+
+
+        if (editingId) {
+
+            response =
+                await fetch(
+                    `${API_URL}/api/teachers/${editingId}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                data
+                            )
+                    }
+                );
+
+        }
+
+        else {
+
+            response =
+                await fetch(
+                    `${API_URL}/api/teachers/`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify({
+                                teacher_id:
+                                    teacherId,
+
+                                ...data
+                            })
+                    }
+                );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            let errorMessage =
+                result.detail ||
+                "Unable to save teacher.";
+
+
+            if (
+                Array.isArray(
+                    result.detail
+                )
+            ) {
+
+                errorMessage =
+                    result.detail
+                        .map(
+                            item =>
+                                `${item.loc?.join(".")}: ${item.msg}`
+                        )
+                        .join("\n");
+
+            }
+
+
+            throw new Error(
+                errorMessage
+            );
+
+        }
+
+
+        showMessage(
+            editingId
+                ? "Teacher updated successfully."
+                : "Teacher added successfully.",
+            "success"
+        );
+
+
+        closeForm();
+
+        await loadTeachers();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// EDIT TEACHER
+// ======================================================
+
+async function editTeacher(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/teachers/${id}`
+            );
+
+
+        const teacher =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                teacher.detail ||
+                "Unable to load teacher."
+            );
+
+        }
+
+
+        editingId = id;
+
+
+        document.getElementById(
+            "formTitle"
+        ).textContent =
+            "Edit Teacher";
+
+
+        document.getElementById(
+            "teacherId"
+        ).value =
+            teacher.teacher_id || "";
+
+
+        document.getElementById(
+            "teacherId"
+        ).disabled = true;
+
+
+        document.getElementById(
+            "firstName"
+        ).value =
+            teacher.first_name || "";
+
+
+        document.getElementById(
+            "lastName"
+        ).value =
+            teacher.last_name || "";
+
+
+        document.getElementById(
+            "phone"
+        ).value =
+            teacher.phone || "";
+
+
+        document.getElementById(
+            "email"
+        ).value =
+            teacher.email || "";
+
+
+        document.getElementById(
+            "specialization"
+        ).value =
+            teacher.specialization || "";
+
+
+        document.getElementById(
+            "userId"
+        ).value =
+            teacher.user_id || "";
+
+
+        document.getElementById(
+            "formCard"
+        ).classList.add(
+            "active"
+        );
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+    catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// VIEW TEACHER
+// ======================================================
+
+async function viewTeacher(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/teachers/${id}`
+            );
+
+
+        const teacher =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                teacher.detail ||
+                "Unable to load teacher."
+            );
+
+        }
+
+
+        const fullName =
+            `${teacher.first_name || ""} ${teacher.last_name || ""}`
+            .trim();
+
+
+        document.getElementById(
+            "teacherDetails"
+        ).innerHTML = `
+
+            <div class="detail-row">
+                <strong>Database ID:</strong>
+                ${teacher.id}
+            </div>
+
+            <div class="detail-row">
+                <strong>Teacher ID:</strong>
+                ${escapeHtml(
+                    teacher.teacher_id
+                )}
+            </div>
+
+            <div class="detail-row">
+                <strong>Name:</strong>
+                ${escapeHtml(
+                    fullName
+                )}
+            </div>
+
+            <div class="detail-row">
+                <strong>Phone:</strong>
+                ${escapeHtml(
+                    teacher.phone || "-"
+                )}
+            </div>
+
+            <div class="detail-row">
+                <strong>Email:</strong>
+                ${escapeHtml(
+                    teacher.email || "-"
+                )}
+            </div>
+
+            <div class="detail-row">
+                <strong>Specialization:</strong>
+                ${escapeHtml(
+                    teacher.specialization || "-"
+                )}
+            </div>
+
+            <div class="detail-row">
+                <strong>User ID:</strong>
+                ${
+                    teacher.user_id ??
+                    "-"
+                }
+            </div>
+
+        `;
+
+
+        document.getElementById(
+            "viewModal"
+        ).classList.add(
+            "active"
+        );
+
+    }
+
+    catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// DELETE TEACHER
+// ======================================================
+
+async function deleteTeacher(id) {
+
+    const teacher =
+        teachers.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!teacher) {
+
+        return;
+
+    }
+
+
+    const fullName =
+        `${teacher.first_name || ""} ${teacher.last_name || ""}`
+        .trim();
+
+
+    const confirmed =
+        confirm(
+            `Delete teacher "${fullName}"?\n\n` +
+            `Teacher ID: ${teacher.teacher_id}`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/teachers/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to delete teacher."
+            );
+
+        }
+
+
+        showMessage(
+            "Teacher deleted successfully.",
+            "success"
+        );
+
+
+        await loadTeachers();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// CLOSE MODAL
+// ======================================================
+
+function closeModal() {
+
+    document.getElementById(
+        "viewModal"
+    ).classList.remove(
+        "active"
+    );
+
+}
+
+
+// ======================================================
+// MESSAGE
+// ======================================================
+
+function showMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "message"
+        );
+
+
+    element.textContent =
+        message;
+
+
+    element.className =
+        `message ${type}`;
+
+
+    setTimeout(
+        function () {
+
+            element.className =
+                "message";
+
+        },
+        5000
+    );
+
+}
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+</script>
+
+</body>
+</html>

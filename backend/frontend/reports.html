@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports - School Solution</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f3f6fa;
+            color: #1f2937;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 18px 12px;
+            overflow-y: auto;
+        }
+
+        .brand {
+            text-align: center;
+            padding: 10px 5px 22px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .menu-btn {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: #d1d5db;
+            padding: 13px 14px;
+            margin: 4px 0;
+            border-radius: 8px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .menu-btn:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .menu-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .topbar p {
+            margin: 6px 0 0;
+            color: #6b7280;
+        }
+
+        /* =========================
+           MESSAGE
+        ========================= */
+
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* =========================
+           PANEL
+        ========================= */
+
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .panel h2 {
+            margin: 0 0 18px;
+            font-size: 20px;
+        }
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #374151;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 15px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-info {
+            background: #0891b2;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* =========================
+           REPORT HEADER
+        ========================= */
+
+        .report-header {
+            text-align: center;
+            padding: 15px;
+            border-bottom: 2px solid #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .report-header h2 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        .report-header .tigrinya {
+            font-size: 20px;
+            margin-top: 5px;
+        }
+
+        .report-header .title {
+            margin-top: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .report-header .subtitle {
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        /* =========================
+           STUDENT INFORMATION
+        ========================= */
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid #d1d5db;
+            margin-bottom: 22px;
+        }
+
+        .info-item {
+            border-right: 1px solid #d1d5db;
+            border-bottom: 1px solid #d1d5db;
+            padding: 12px;
+        }
+
+        .info-item:nth-child(4n) {
+            border-right: none;
+        }
+
+        .info-label {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-weight: bold;
+        }
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 9px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .summary-card .label {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .summary-card .value {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           SECTION TITLE
+        ========================= */
+
+        .section-title {
+            margin: 22px 0 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #d1d5db;
+            font-size: 17px;
+        }
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 11px 10px;
+            border: 1px solid #d1d5db;
+            text-align: left;
+        }
+
+        th {
+            background: #1f4e78;
+            color: white;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 13px;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        /* =========================
+           PERFORMANCE
+        ========================= */
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .performance-card {
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            padding: 18px;
+            background: #f8fafc;
+        }
+
+        .performance-card h3 {
+            margin: 0 0 8px;
+            font-size: 15px;
+        }
+
+        .performance-card p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           COMMENTS
+        ========================= */
+
+        .comment {
+            padding: 10px 12px;
+            border-left: 4px solid #2563eb;
+            background: #f8fafc;
+            margin-bottom: 8px;
+        }
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .report-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .search-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .student-info {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-item:nth-child(4n) {
+                border-right: 1px solid #d1d5db;
+            }
+
+            .summary-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .student-info {
+                grid-template-columns: 1fr;
+            }
+
+            .info-item {
+                border-right: none !important;
+            }
+
+            .summary-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="brand">
+        <h2>School Solution</h2>
+        <p>መፍትሕ</p>
+    </div>
+
+    <button class="menu-btn" onclick="go('dashboard.html')">
+        🏠 Dashboard
+    </button>
+
+    <button class="menu-btn" onclick="go('students.html')">
+        👨‍🎓 Students
+    </button>
+
+    <button class="menu-btn" onclick="go('classes.html')">
+        🏫 Classes
+    </button>
+
+    <button class="menu-btn" onclick="go('subjects.html')">
+        📚 Subjects
+    </button>
+
+    <button class="menu-btn" onclick="go('teachers.html')">
+        👨‍🏫 Teachers
+    </button>
+
+    <button class="menu-btn" onclick="go('marks.html')">
+        📊 Marks / Grades
+    </button>
+
+    <button class="menu-btn" onclick="go('attendance.html')">
+        📅 Attendance
+    </button>
+
+    <button class="menu-btn" onclick="go('fees.html')">
+        💰 Fees
+    </button>
+
+    <button class="menu-btn" onclick="go('receipts.html')">
+        🧾 Receipts
+    </button>
+
+    <button class="menu-btn active">
+        📑 Reports
+    </button>
+
+    <button class="menu-btn" onclick="go('settings.html')">
+        ⚙️ School Settings
+    </button>
+
+</div>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+    <div class="topbar">
+        <h1>📑 Student Reports</h1>
+        <p>Generate student report cards and professional PDF reports.</p>
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+
+    <!-- =========================
+         SEARCH PANEL
+    ========================= -->
+
+    <div class="panel">
+
+        <h2>Generate Report Card</h2>
+
+        <div class="search-grid">
+
+            <div>
+                <label>Student</label>
+
+                <select id="studentSelect">
+                    <option value="">
+                        Loading students...
+                    </option>
+                </select>
+            </div>
+
+
+            <div>
+                <label>Academic Year</label>
+
+                <input
+                    type="text"
+                    id="academicYear"
+                    placeholder="2026/2027"
+                >
+            </div>
+
+
+            <div>
+                <label>Term</label>
+
+                <select id="term">
+
+                    <option value="">
+                        Select Term
+                    </option>
+
+                    <option value="Term 1">
+                        Term 1
+                    </option>
+
+                    <option value="Term 2">
+                        Term 2
+                    </option>
+
+                    <option value="Term 3">
+                        Term 3
+                    </option>
+
+                </select>
+            </div>
+
+
+            <button
+                class="btn-primary"
+                onclick="generateReport()"
+            >
+                🔍 Generate
+            </button>
+
+
+            <button
+                class="btn-secondary"
+                onclick="clearReport()"
+            >
+                Clear
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         REPORT
+    ========================= -->
+
+    <div
+        id="reportPanel"
+        class="panel"
+        style="display:none;"
+    >
+
+        <div class="report-actions">
+
+            <button
+                class="btn-success"
+                onclick="downloadPDF()"
+            >
+                📄 Download PDF Report
+            </button>
+
+            <button
+                class="btn-info"
+                onclick="openPDF()"
+            >
+                👁 Open PDF
+            </button>
+
+            <button
+                class="btn-secondary"
+                onclick="printReport()"
+            >
+                🖨️ Print Report
+            </button>
+
+            <button
+                class="btn-primary"
+                onclick="refreshReport()"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+
+        <!-- REPORT HEADER -->
+
+        <div class="report-header">
+
+            <h2 id="schoolName">
+                School Solution
+            </h2>
+
+            <div
+                class="tigrinya"
+                id="schoolNameTigrinya"
+            >
+                መፍትሕ
+            </div>
+
+            <div
+                id="schoolContact"
+                style="color:#6b7280; margin-top:8px;"
+            ></div>
+
+            <div class="title">
+                STUDENT REPORT CARD
+            </div>
+
+            <div class="subtitle">
+                Academic Performance Report
+            </div>
+
+        </div>
+
+
+        <!-- STUDENT INFO -->
+
+        <h3 class="section-title">
+            Student Information
+        </h3>
+
+        <div class="student-info">
+
+            <div class="info-item">
+                <div class="info-label">
+                    Student Name
+                </div>
+
+                <div
+                    class="info-value"
+                    id="studentName"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="info-item">
+                <div class="info-label">
+                    Student ID
+                </div>
+
+                <div
+                    class="info-value"
+                    id="studentIdDisplay"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="info-item">
+                <div class="info-label">
+                    Class
+                </div>
+
+                <div
+                    class="info-value"
+                    id="className"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="info-item">
+                <div class="info-label">
+                    Gender
+                </div>
+
+                <div
+                    class="info-value"
+                    id="gender"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="info-item">
+                <div class="info-label">
+                    Academic Year
+                </div>
+
+                <div
+                    class="info-value"
+                    id="reportAcademicYear"
+                >
+                    -
+                </div>
+            </div>
+
+
+            <div class="info-item">
+                <div class="info-label">
+                    Term
+                </div>
+
+                <div
+                    class="info-value"
+                    id="reportTerm"
+                >
+                    -
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <h3 class="section-title">
+            Academic Summary
+        </h3>
+
+        <div class="summary-cards">
+
+            <div class="summary-card">
+
+                <div class="label">
+                    Subjects
+                </div>
+
+                <div
+                    class="value"
+                    id="subjectCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="label">
+                    Total Marks
+                </div>
+
+                <div
+                    class="value"
+                    id="totalMarks"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="label">
+                    Average
+                </div>
+
+                <div
+                    class="value"
+                    id="averageMark"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="label">
+                    Average Grade Point
+                </div>
+
+                <div
+                    class="value"
+                    id="averageGradePoint"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="summary-card">
+
+                <div class="label">
+                    Performance
+                </div>
+
+                <div
+                    class="value"
+                    id="overallPerformance"
+                >
+                    -
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUBJECT RESULTS -->
+
+        <h3 class="section-title">
+            Subject Results
+        </h3>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>No.</th>
+
+                        <th>Subject</th>
+
+                        <th>Code</th>
+
+                        <th>Mark</th>
+
+                        <th>Grade</th>
+
+                        <th>Grade Point</th>
+
+                        <th>Remark</th>
+
+                        <th>Teacher Comment</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="resultsTable">
+
+                    <tr>
+                        <td
+                            colspan="8"
+                            class="empty"
+                        >
+                            Generate a report to see results.
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- PERFORMANCE -->
+
+        <h3 class="section-title">
+            Performance Analysis
+        </h3>
+
+        <div class="performance-grid">
+
+            <div class="performance-card">
+
+                <h3>
+                    🏆 Best Subject
+                </h3>
+
+                <p id="bestSubject">
+                    -
+                </p>
+
+            </div>
+
+
+            <div class="performance-card">
+
+                <h3>
+                    📈 Weakest Subject
+                </h3>
+
+                <p id="weakestSubject">
+                    -
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- COMMENTS -->
+
+        <h3 class="section-title">
+            Teacher Comments
+        </h3>
+
+        <div id="teacherComments">
+
+            <div class="empty">
+                No teacher comments recorded.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- NO REPORT -->
+
+    <div
+        id="emptyPanel"
+        class="panel"
+    >
+
+        <div class="empty">
+
+            <h2>📑 Student Report Cards</h2>
+
+            <p>
+                Select a student, academic year and term,
+                then click <strong>Generate</strong>.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+let currentReport = null;
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function go(page) {
+    window.location.href = page;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showMessage(message, type = "success") {
+
+    const box =
+        document.getElementById("message");
+
+    box.textContent = message;
+
+    box.className =
+        "message " + type;
+
+    setTimeout(() => {
+
+        box.className = "message";
+
+    }, 4500);
+}
+
+
+/* =========================
+   API
+========================= */
+
+async function apiRequest(url, options = {}) {
+
+    const response =
+        await fetch(
+            API_URL + url,
+            {
+                ...options,
+
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(options.headers || {})
+                }
+            }
+        );
+
+
+    if (!response.ok) {
+
+        let message =
+            "Request failed.";
+
+        try {
+
+            const data =
+                await response.json();
+
+            message =
+                data.detail || message;
+
+        } catch (error) {
+            // ignore
+        }
+
+        throw new Error(message);
+    }
+
+
+    return response.json();
+}
+
+
+/* =========================
+   LOAD STUDENTS
+========================= */
+
+async function loadStudents() {
+
+    const select =
+        document.getElementById(
+            "studentSelect"
+        );
+
+
+    select.innerHTML = `
+        <option value="">
+            Loading students...
+        </option>
+    `;
+
+
+    try {
+
+        const students =
+            await apiRequest(
+                "/api/students/"
+            );
+
+
+        select.innerHTML = `
+            <option value="">
+                Select Student
+            </option>
+        `;
+
+
+        if (!Array.isArray(students) ||
+            students.length === 0) {
+
+            select.innerHTML += `
+                <option value="">
+                    No students found
+                </option>
+            `;
+
+            return;
+        }
+
+
+        students.forEach(student => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                student.id;
+
+
+            const name =
+                `${student.first_name || ""} ${student.last_name || ""}`
+                    .trim();
+
+
+            option.textContent =
+                `${student.student_id || student.id} — ${name}`;
+
+
+            select.appendChild(option);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        select.innerHTML = `
+            <option value="">
+                Could not load students
+            </option>
+        `;
+
+
+        showMessage(
+            "Could not load students: " +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* =========================
+   GENERATE REPORT
+========================= */
+
+async function generateReport() {
+
+    const studentId =
+        document.getElementById(
+            "studentSelect"
+        ).value;
+
+
+    const academicYear =
+        document.getElementById(
+            "academicYear"
+        ).value.trim();
+
+
+    const term =
+        document.getElementById(
+            "term"
+        ).value;
+
+
+    if (!studentId) {
+
+        showMessage(
+            "Please select a student.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!academicYear) {
+
+        showMessage(
+            "Please enter the academic year.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!term) {
+
+        showMessage(
+            "Please select a term.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        showMessage(
+            "Generating report...",
+            "success"
+        );
+
+
+        const url =
+            `/api/reports/student/${studentId}` +
+            `?academic_year=${encodeURIComponent(academicYear)}` +
+            `&term=${encodeURIComponent(term)}`;
+
+
+        const report =
+            await apiRequest(url);
+
+
+        currentReport =
+            report;
+
+
+        displayReport(report);
+
+
+        document.getElementById(
+            "reportPanel"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "emptyPanel"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "reportPanel"
+        ).scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+
+        showMessage(
+            "Report generated successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+            "Could not generate report: " +
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* =========================
+   DISPLAY REPORT
+========================= */
+
+function displayReport(report) {
+
+    const school =
+        report.school || {};
+
+
+    const student =
+        report.student || {};
+
+
+    const summary =
+        report.summary || {};
+
+
+    const performance =
+        report.performance || {};
+
+
+    const results =
+        report.results || [];
+
+
+    /* SCHOOL */
+
+    document.getElementById(
+        "schoolName"
+    ).textContent =
+        school.name ||
+        "School Solution";
+
+
+    document.getElementById(
+        "schoolNameTigrinya"
+    ).textContent =
+        school.name_tigrinya ||
+        "መፍትሕ";
+
+
+    const contactParts = [];
+
+
+    if (school.address) {
+        contactParts.push(
+            school.address
+        );
+    }
+
+
+    if (school.phone) {
+        contactParts.push(
+            "Tel: " + school.phone
+        );
+    }
+
+
+    if (school.email) {
+        contactParts.push(
+            "Email: " + school.email
+        );
+    }
+
+
+    if (school.website) {
+        contactParts.push(
+            school.website
+        );
+    }
+
+
+    document.getElementById(
+        "schoolContact"
+    ).textContent =
+        contactParts.join(" | ");
+
+
+    /* STUDENT */
+
+    const studentName =
+        `${student.first_name || ""} ${student.last_name || ""}`
+            .trim();
+
+
+    document.getElementById(
+        "studentName"
+    ).textContent =
+        studentName || "-";
+
+
+    document.getElementById(
+        "studentIdDisplay"
+    ).textContent =
+        student.student_id || "-";
+
+
+    document.getElementById(
+        "className"
+    ).textContent =
+        student.class_name || "-";
+
+
+    document.getElementById(
+        "gender"
+    ).textContent =
+        student.gender || "-";
+
+
+    document.getElementById(
+        "reportAcademicYear"
+    ).textContent =
+        student.academic_year || "-";
+
+
+    document.getElementById(
+        "reportTerm"
+    ).textContent =
+        student.term || "-";
+
+
+    /* SUMMARY */
+
+    document.getElementById(
+        "subjectCount"
+    ).textContent =
+        summary.subject_count ?? 0;
+
+
+    document.getElementById(
+        "totalMarks"
+    ).textContent =
+        formatNumber(
+            summary.total_marks
+        );
+
+
+    document.getElementById(
+        "averageMark"
+    ).textContent =
+        formatNumber(
+            summary.average_mark
+        );
+
+
+    document.getElementById(
+        "averageGradePoint"
+    ).textContent =
+        formatNumber(
+            summary.average_grade_point
+        );
+
+
+    document.getElementById(
+        "overallPerformance"
+    ).textContent =
+        summary.overall_performance ||
+        "-";
+
+
+    /* RESULTS */
+
+    renderResults(results);
+
+
+    /* PERFORMANCE */
+
+    renderPerformance(performance);
+
+
+    /* COMMENTS */
+
+    renderComments(results);
+}
+
+
+/* =========================
+   RESULTS TABLE
+========================= */
+
+function renderResults(results) {
+
+    const tbody =
+        document.getElementById(
+            "resultsTable"
+        );
+
+
+    tbody.innerHTML = "";
+
+
+    if (!results.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty"
+                >
+                    No marks found for this
+                    student, academic year
+                    and term.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    results.forEach(
+        (result, index) => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td class="center">
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        result.subject_name || "Unknown"
+                    )}
+                </td>
+
+                <td class="center">
+                    ${escapeHtml(
+                        result.subject_code || ""
+                    )}
+                </td>
+
+                <td class="center">
+                    ${formatNumber(
+                        result.mark
+                    )}
+                </td>
+
+                <td class="center">
+                    <strong>
+                        ${escapeHtml(
+                            result.grade || ""
+                        )}
+                    </strong>
+                </td>
+
+                <td class="center">
+                    ${formatNumber(
+                        result.grade_point
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        result.remark || ""
+                    )}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        result.teacher_comment || ""
+                    )}
+                </td>
+
+            `;
+
+
+            tbody.appendChild(row);
+
+        }
+    );
+}
+
+
+/* =========================
+   PERFORMANCE
+========================= */
+
+function renderPerformance(performance) {
+
+    const best =
+        performance.best_subject;
+
+
+    const weakest =
+        performance.weakest_subject;
+
+
+    const bestText =
+        best
+            ? `${best.subject_name || "Unknown"} — ${formatNumber(best.mark)}% (${best.grade || "-"})`
+            : "N/A";
+
+
+    const weakestText =
+        weakest
+            ? `${weakest.subject_name || "Unknown"} — ${formatNumber(weakest.mark)}% (${weakest.grade || "-"})`
+            : "N/A";
+
+
+    document.getElementById(
+        "bestSubject"
+    ).textContent =
+        bestText;
+
+
+    document.getElementById(
+        "weakestSubject"
+    ).textContent =
+        weakestText;
+}
+
+
+/* =========================
+   TEACHER COMMENTS
+========================= */
+
+function renderComments(results) {
+
+    const container =
+        document.getElementById(
+            "teacherComments"
+        );
+
+
+    container.innerHTML = "";
+
+
+    const comments =
+        results.filter(
+            result =>
+                result.teacher_comment &&
+                result.teacher_comment.trim()
+        );
+
+
+    if (!comments.length) {
+
+        container.innerHTML = `
+            <div class="empty">
+                No teacher comments recorded.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    comments.forEach(result => {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+
+        div.className =
+            "comment";
+
+
+        div.innerHTML = `
+            <strong>
+                ${escapeHtml(
+                    result.subject_name || "Subject"
+                )}
+            </strong>:
+            ${escapeHtml(
+                result.teacher_comment
+            )}
+        `;
+
+
+        container.appendChild(div);
+
+    });
+}
+
+
+/* =========================
+   PDF URL
+========================= */
+
+function getPDFUrl() {
+
+    if (!currentReport ||
+        !currentReport.student) {
+
+        return null;
+    }
+
+
+    const studentId =
+        currentReport.student.id;
+
+
+    const academicYear =
+        currentReport.student.academic_year;
+
+
+    const term =
+        currentReport.student.term;
+
+
+    return (
+        `${API_URL}/api/reports/student/${studentId}/pdf` +
+        `?academic_year=${encodeURIComponent(academicYear)}` +
+        `&term=${encodeURIComponent(term)}`
+    );
+}
+
+
+/* =========================
+   DOWNLOAD PDF
+========================= */
+
+function downloadPDF() {
+
+    const url =
+        getPDFUrl();
+
+
+    if (!url) {
+
+        showMessage(
+            "Generate a report first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.target =
+        "_blank";
+
+
+    link.click();
+}
+
+
+/* =========================
+   OPEN PDF
+========================= */
+
+function openPDF() {
+
+    const url =
+        getPDFUrl();
+
+
+    if (!url) {
+
+        showMessage(
+            "Generate a report first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+function refreshReport() {
+
+    if (!currentReport) {
+
+        generateReport();
+
+        return;
+    }
+
+
+    generateReport();
+}
+
+
+/* =========================
+   PRINT
+========================= */
+
+function printReport() {
+
+    if (!currentReport) {
+
+        showMessage(
+            "Generate a report first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const reportPanel =
+        document.getElementById(
+            "reportPanel"
+        );
+
+
+    const content =
+        reportPanel.innerHTML;
+
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank",
+            "width=1200,height=900"
+        );
+
+
+    printWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>
+                Student Report Card
+            </title>
+
+            <style>
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    font-family: Arial, sans-serif;
+                    color: #111;
+                    padding: 25px;
+                }
+
+                .report-actions {
+                    display: none !important;
+                }
+
+                .report-header {
+                    text-align: center;
+                    padding: 15px;
+                    border-bottom: 2px solid #111;
+                    margin-bottom: 20px;
+                }
+
+                .report-header h2 {
+                    margin: 0;
+                }
+
+                .report-header .title {
+                    margin-top: 10px;
+                    font-weight: bold;
+                }
+
+                .student-info {
+                    display: grid;
+                    grid-template-columns:
+                        repeat(4, 1fr);
+                    border: 1px solid #aaa;
+                }
+
+                .info-item {
+                    padding: 10px;
+                    border-right: 1px solid #aaa;
+                    border-bottom: 1px solid #aaa;
+                }
+
+                .info-label {
+                    font-size: 11px;
+                    color: #555;
+                }
+
+                .info-value {
+                    font-weight: bold;
+                }
+
+                .summary-cards {
+                    display: grid;
+                    grid-template-columns:
+                        repeat(5, 1fr);
+                    gap: 8px;
+                    margin: 15px 0;
+                }
+
+                .summary-card {
+                    border: 1px solid #aaa;
+                    padding: 10px;
+                    text-align: center;
+                }
+
+                .summary-card .label {
+                    font-size: 11px;
+                }
+
+                .summary-card .value {
+                    font-weight: bold;
+                    font-size: 16px;
+                }
+
+                .section-title {
+                    border-bottom: 1px solid #aaa;
+                    padding-bottom: 5px;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                th,
+                td {
+                    border: 1px solid #aaa;
+                    padding: 7px;
+                    font-size: 11px;
+                }
+
+                th {
+                    background: #1f4e78;
+                    color: white;
+                }
+
+                .performance-grid {
+                    display: grid;
+                    grid-template-columns:
+                        1fr 1fr;
+                    gap: 10px;
+                }
+
+                .performance-card {
+                    border: 1px solid #aaa;
+                    padding: 12px;
+                }
+
+                .comment {
+                    border-left: 3px solid #2563eb;
+                    padding: 8px;
+                    margin-bottom: 5px;
+                }
+
+                @media print {
+
+                    body {
+                        padding: 10mm;
+                    }
+
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            ${content}
+
+        </body>
+
+        </html>
+    `);
+
+
+    printWindow.document.close();
+
+
+    printWindow.onload = () => {
+
+        printWindow.focus();
+
+        printWindow.print();
+
+    };
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+function clearReport() {
+
+    document.getElementById(
+        "studentSelect"
+    ).value = "";
+
+
+    document.getElementById(
+        "academicYear"
+    ).value = "";
+
+
+    document.getElementById(
+        "term"
+    ).value = "";
+
+
+    currentReport =
+        null;
+
+
+    document.getElementById(
+        "reportPanel"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "emptyPanel"
+    ).style.display =
+        "block";
+
+
+    document.getElementById(
+        "selectedStudent"
+    );
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================
+   NUMBER FORMAT
+========================= */
+
+function formatNumber(value) {
+
+    const number =
+        Number(value);
+
+
+    if (isNaN(number)) {
+        return "0.00";
+    }
+
+
+    return number.toFixed(2);
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =========================
+   START
+========================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadStudents();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

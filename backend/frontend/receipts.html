@@ -1,0 +1,1512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receipts - School Solution</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 20px 12px;
+            overflow-y: auto;
+        }
+
+        .brand {
+            text-align: center;
+            padding: 10px 5px 25px;
+            border-bottom: 1px solid #374151;
+            margin-bottom: 15px;
+        }
+
+        .brand h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .menu-btn {
+            width: 100%;
+            display: block;
+            padding: 13px 14px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            color: #d1d5db;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .menu-btn:hover {
+            background: #1f2937;
+            color: white;
+        }
+
+        .menu-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 240px;
+            min-height: 100vh;
+            padding: 25px;
+        }
+
+        .topbar {
+            background: white;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .topbar h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .topbar p {
+            margin: 5px 0 0;
+            color: #6b7280;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .card-title {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 26px;
+            font-weight: bold;
+        }
+
+        /* PANEL */
+        .panel {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.06);
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        /* FILTERS */
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #2563eb;
+        }
+
+        /* BUTTONS */
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #15803d;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-info {
+            background: #0891b2;
+            color: white;
+        }
+
+        /* TABLE */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f9fafb;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        td {
+            font-size: 13px;
+        }
+
+        tr:hover td {
+            background: #f9fafb;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .actions button {
+            padding: 7px 9px;
+            font-size: 12px;
+        }
+
+        /* STATUS */
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-partial {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-unpaid {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* EMPTY */
+        .empty {
+            text-align: center;
+            padding: 35px;
+            color: #6b7280;
+        }
+
+        /* MESSAGE */
+        .message {
+            display: none;
+            padding: 12px 15px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* RECEIPT PREVIEW */
+        .receipt-preview {
+            display: none;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .receipt-preview.show {
+            display: block;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid #111827;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .receipt-header p {
+            margin: 5px 0;
+            color: #6b7280;
+        }
+
+        .receipt-section {
+            margin-bottom: 20px;
+        }
+
+        .receipt-section h3 {
+            font-size: 15px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 7px;
+        }
+
+        .receipt-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            border: 1px solid #ddd;
+        }
+
+        .receipt-grid div {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .receipt-grid div:nth-child(odd) {
+            background: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .amount-box {
+            border: 2px solid #111827;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .receipt-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .receipt-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <div class="brand">
+        <h2>School Solution</h2>
+        <p>መፍትሕ</p>
+    </div>
+
+    <button class="menu-btn" onclick="go('dashboard.html')">
+        🏠 Dashboard
+    </button>
+
+    <button class="menu-btn" onclick="go('students.html')">
+        👨‍🎓 Students
+    </button>
+
+    <button class="menu-btn" onclick="go('classes.html')">
+        🏫 Classes
+    </button>
+
+    <button class="menu-btn" onclick="go('subjects.html')">
+        📚 Subjects
+    </button>
+
+    <button class="menu-btn" onclick="go('teachers.html')">
+        👨‍🏫 Teachers
+    </button>
+
+    <button class="menu-btn" onclick="go('marks.html')">
+        📊 Marks / Grades
+    </button>
+
+    <button class="menu-btn" onclick="go('attendance.html')">
+        📅 Attendance
+    </button>
+
+    <button class="menu-btn" onclick="go('fees.html')">
+        💰 Fees
+    </button>
+
+    <button class="menu-btn active">
+        🧾 Receipts
+    </button>
+
+    <button class="menu-btn" onclick="go('reports.html')">
+        📑 Reports
+    </button>
+
+    <button class="menu-btn" onclick="go('settings.html')">
+        ⚙️ School Settings
+    </button>
+
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+    <div class="topbar">
+        <h1>🧾 Receipts</h1>
+        <p>Search payments and generate official school payment receipts.</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+
+    <!-- SUMMARY -->
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-title">Payments Found</div>
+            <div class="card-value" id="paymentCount">0</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Total Payments</div>
+            <div class="card-value" id="totalPayments">£0.00</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Selected Payment</div>
+            <div class="card-value" id="selectedPayment">None</div>
+        </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="panel">
+
+        <h2>Find Payment</h2>
+
+        <div class="filters">
+
+            <input
+                type="number"
+                id="studentId"
+                placeholder="Student ID"
+            >
+
+            <input
+                type="number"
+                id="feeRecordId"
+                placeholder="Fee Record ID"
+            >
+
+            <button
+                class="btn-primary"
+                onclick="loadPayments()"
+            >
+                🔍 Search
+            </button>
+
+        </div>
+
+        <button
+            class="btn-secondary"
+            onclick="clearSearch()"
+        >
+            Clear
+        </button>
+
+    </div>
+
+
+    <!-- PAYMENTS -->
+    <div class="panel">
+
+        <h2>Payment History</h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Student</th>
+                        <th>Student ID</th>
+                        <th>Fee Record</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Method</th>
+                        <th>Reference</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="paymentTable">
+
+                    <tr>
+                        <td colspan="9" class="empty">
+                            Loading payments...
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECEIPT PREVIEW -->
+    <div class="panel">
+
+        <h2>Receipt</h2>
+
+        <div id="receiptPreview" class="receipt-preview">
+
+            <div class="receipt-header">
+                <h2>SCHOOL SOLUTION</h2>
+                <p>መፍትሕ</p>
+                <p><strong>PAYMENT RECEIPT</strong></p>
+                <p>Official School Payment Receipt</p>
+            </div>
+
+            <div class="receipt-section">
+
+                <h3>Receipt Information</h3>
+
+                <div class="receipt-grid">
+
+                    <div>Receipt Number</div>
+                    <div id="previewReceiptNumber">-</div>
+
+                    <div>Date</div>
+                    <div id="previewDate">-</div>
+
+                    <div>Academic Year</div>
+                    <div id="previewAcademicYear">-</div>
+
+                    <div>Term</div>
+                    <div id="previewTerm">-</div>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-section">
+
+                <h3>Student Information</h3>
+
+                <div class="receipt-grid">
+
+                    <div>Student Name</div>
+                    <div id="previewStudentName">-</div>
+
+                    <div>Student ID</div>
+                    <div id="previewStudentId">-</div>
+
+                </div>
+
+            </div>
+
+
+            <div class="receipt-section">
+
+                <h3>Payment Information</h3>
+
+                <div class="receipt-grid">
+
+                    <div>Fee Type</div>
+                    <div id="previewFeeType">-</div>
+
+                    <div>Amount Paid</div>
+                    <div id="previewAmount">£0.00</div>
+
+                    <div>Payment Method</div>
+                    <div id="previewMethod">-</div>
+
+                    <div>Reference</div>
+                    <div id="previewReference">-</div>
+
+                    <div>Remaining Balance</div>
+                    <div id="previewBalance">£0.00</div>
+
+                    <div>Status</div>
+                    <div id="previewStatus">-</div>
+
+                </div>
+
+            </div>
+
+
+            <div class="amount-box">
+
+                <span>AMOUNT RECEIVED</span>
+
+                <span id="previewTotal">
+                    £0.00
+                </span>
+
+            </div>
+
+
+            <div
+                class="receipt-section"
+                id="previewNoteSection"
+                style="display:none;"
+            >
+
+                <h3>Note</h3>
+
+                <p id="previewNote"></p>
+
+            </div>
+
+
+            <div class="receipt-actions">
+
+                <button
+                    class="btn-success"
+                    onclick="downloadSelectedReceipt()"
+                >
+                    📄 Generate / Open PDF Receipt
+                </button>
+
+                <button
+                    class="btn-secondary"
+                    onclick="printPreview()"
+                >
+                    🖨️ Print Preview
+                </button>
+
+            </div>
+
+        </div>
+
+        <div
+            id="noReceipt"
+            class="empty"
+        >
+            Select a payment to view its receipt.
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+let payments = [];
+let selectedPayment = null;
+
+
+/* -------------------------
+   NAVIGATION
+------------------------- */
+
+function go(page) {
+    window.location.href = page;
+}
+
+
+/* -------------------------
+   MESSAGE
+------------------------- */
+
+function showMessage(message, type = "success") {
+
+    const box = document.getElementById("message");
+
+    box.textContent = message;
+
+    box.className = "message " + type;
+
+    setTimeout(() => {
+        box.className = "message";
+    }, 4000);
+}
+
+
+/* -------------------------
+   API REQUEST
+------------------------- */
+
+async function apiRequest(url, options = {}) {
+
+    const response = await fetch(API_URL + url, {
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    if (!response.ok) {
+
+        let message = "Request failed.";
+
+        try {
+            const data = await response.json();
+            message = data.detail || message;
+        } catch (error) {
+            // ignore
+        }
+
+        throw new Error(message);
+    }
+
+    return response.json();
+}
+
+
+/* -------------------------
+   LOAD PAYMENTS
+------------------------- */
+
+async function loadPayments() {
+
+    const studentId =
+        document.getElementById("studentId").value.trim();
+
+    const feeRecordId =
+        document.getElementById("feeRecordId").value.trim();
+
+    let url = "/api/fees/payments/history";
+
+    const params = new URLSearchParams();
+
+    if (studentId) {
+        params.append("student_id", studentId);
+    }
+
+    if (feeRecordId) {
+        params.append("fee_record_id", feeRecordId);
+    }
+
+    if (params.toString()) {
+        url += "?" + params.toString();
+    }
+
+    const tbody =
+        document.getElementById("paymentTable");
+
+    tbody.innerHTML = `
+        <tr>
+            <td colspan="9" class="empty">
+                Loading payments...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        payments = await apiRequest(url);
+
+        if (!Array.isArray(payments)) {
+            payments = [];
+        }
+
+        renderPayments();
+
+    } catch (error) {
+
+        console.error(error);
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">
+                    ${escapeHtml(error.message)}
+                </td>
+            </tr>
+        `;
+
+        showMessage(
+            "Could not load payment history: " + error.message,
+            "error"
+        );
+    }
+}
+
+
+/* -------------------------
+   RENDER PAYMENTS
+------------------------- */
+
+function renderPayments() {
+
+    const tbody =
+        document.getElementById("paymentTable");
+
+    tbody.innerHTML = "";
+
+    let total = 0;
+
+    document.getElementById("paymentCount").textContent =
+        payments.length;
+
+
+    if (!payments.length) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="9" class="empty">
+                    No payments found.
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("totalPayments").textContent =
+            "£0.00";
+
+        return;
+    }
+
+
+    payments.forEach(payment => {
+
+        const amount =
+            Number(payment.amount || 0);
+
+        total += amount;
+
+
+        const student =
+            payment.student || {};
+
+        const studentName =
+            student.name ||
+            `${student.first_name || ""} ${student.last_name || ""}`.trim() ||
+            "-";
+
+        const studentCode =
+            student.student_id ||
+            student.id ||
+            "-";
+
+
+        const date =
+            formatDate(payment.payment_date);
+
+
+        const reference =
+            payment.reference || "-";
+
+
+        const method =
+            payment.payment_method || "-";
+
+
+        const feeRecord =
+            payment.fee_record_id || "-";
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${payment.id}</td>
+
+            <td>${escapeHtml(studentName)}</td>
+
+            <td>${escapeHtml(String(studentCode))}</td>
+
+            <td>${escapeHtml(String(feeRecord))}</td>
+
+            <td>
+                £${amount.toLocaleString(
+                    "en-GB",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                )}
+            </td>
+
+            <td>${escapeHtml(date)}</td>
+
+            <td>${escapeHtml(method)}</td>
+
+            <td>${escapeHtml(reference)}</td>
+
+            <td>
+
+                <div class="actions">
+
+                    <button
+                        class="btn-info"
+                        onclick="viewReceipt(${payment.id})"
+                    >
+                        👁 View
+                    </button>
+
+                    <button
+                        class="btn-success"
+                        onclick="openReceiptPDF(${payment.id})"
+                    >
+                        📄 PDF
+                    </button>
+
+                </div>
+
+            </td>
+        `;
+
+        tbody.appendChild(row);
+
+    });
+
+
+    document.getElementById("totalPayments").textContent =
+        "£" +
+        total.toLocaleString(
+            "en-GB",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+}
+
+
+/* -------------------------
+   VIEW RECEIPT
+------------------------- */
+
+async function viewReceipt(paymentId) {
+
+    try {
+
+        const payment =
+            payments.find(
+                item => Number(item.id) === Number(paymentId)
+            );
+
+        if (!payment) {
+            throw new Error("Payment not found.");
+        }
+
+        selectedPayment = payment;
+
+        await buildReceiptPreview(payment);
+
+        document.getElementById("selectedPayment").textContent =
+            "#" + payment.id;
+
+        document.getElementById("receiptPreview").classList.add("show");
+
+        document.getElementById("noReceipt").style.display =
+            "none";
+
+        document.getElementById("receiptPreview")
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    } catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+    }
+}
+
+
+/* -------------------------
+   BUILD RECEIPT PREVIEW
+------------------------- */
+
+async function buildReceiptPreview(payment) {
+
+    const feeRecordId =
+        payment.fee_record_id;
+
+
+    let feeRecord = null;
+
+    try {
+
+        feeRecord =
+            await apiRequest(
+                `/api/fees/${feeRecordId}`
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Could not load fee record:",
+            error
+        );
+    }
+
+
+    const student =
+        payment.student || {};
+
+
+    let studentName =
+        student.name ||
+        `${student.first_name || ""} ${student.last_name || ""}`.trim();
+
+
+    if (!studentName) {
+
+        studentName =
+            student.student_name ||
+            "-";
+    }
+
+
+    let feeTypeName = "-";
+
+    let academicYear = "-";
+
+    let term = "-";
+
+    let balance = 0;
+
+    let status = "-";
+
+
+    if (feeRecord) {
+
+        if (feeRecord.fee_type) {
+
+            feeTypeName =
+                feeRecord.fee_type.name || "-";
+
+        } else if (feeRecord.fee_type_name) {
+
+            feeTypeName =
+                feeRecord.fee_type_name;
+        }
+
+
+        academicYear =
+            feeRecord.academic_year || "-";
+
+
+        term =
+            feeRecord.term || "-";
+
+
+        balance =
+            Number(
+                feeRecord.balance || 0
+            );
+
+
+        status =
+            feeRecord.status || "-";
+    }
+
+
+    const receiptNumber =
+        payment.reference ||
+        `PAY-${String(payment.id).padStart(4, "0")}`;
+
+
+    const amount =
+        Number(payment.amount || 0);
+
+
+    document.getElementById(
+        "previewReceiptNumber"
+    ).textContent = receiptNumber;
+
+
+    document.getElementById(
+        "previewDate"
+    ).textContent =
+        formatDate(payment.payment_date);
+
+
+    document.getElementById(
+        "previewAcademicYear"
+    ).textContent =
+        academicYear;
+
+
+    document.getElementById(
+        "previewTerm"
+    ).textContent =
+        term;
+
+
+    document.getElementById(
+        "previewStudentName"
+    ).textContent =
+        studentName;
+
+
+    document.getElementById(
+        "previewStudentId"
+    ).textContent =
+        student.student_id ||
+        student.id ||
+        "-";
+
+
+    document.getElementById(
+        "previewFeeType"
+    ).textContent =
+        feeTypeName;
+
+
+    document.getElementById(
+        "previewAmount"
+    ).textContent =
+        formatMoney(amount);
+
+
+    document.getElementById(
+        "previewMethod"
+    ).textContent =
+        payment.payment_method ||
+        "Not specified";
+
+
+    document.getElementById(
+        "previewReference"
+    ).textContent =
+        payment.reference ||
+        "-";
+
+
+    document.getElementById(
+        "previewBalance"
+    ).textContent =
+        formatMoney(balance);
+
+
+    document.getElementById(
+        "previewStatus"
+    ).textContent =
+        status;
+
+
+    document.getElementById(
+        "previewTotal"
+    ).textContent =
+        formatMoney(amount);
+
+
+    const note =
+        payment.note || "";
+
+
+    const noteSection =
+        document.getElementById(
+            "previewNoteSection"
+        );
+
+
+    if (note) {
+
+        noteSection.style.display =
+            "block";
+
+        document.getElementById(
+            "previewNote"
+        ).textContent =
+            note;
+
+    } else {
+
+        noteSection.style.display =
+            "none";
+    }
+}
+
+
+/* -------------------------
+   OPEN PDF
+------------------------- */
+
+function openReceiptPDF(paymentId) {
+
+    const url =
+        `${API_URL}/api/receipts/payment/${paymentId}/pdf`;
+
+    window.open(
+        url,
+        "_blank"
+    );
+}
+
+
+/* -------------------------
+   DOWNLOAD / OPEN SELECTED
+------------------------- */
+
+function downloadSelectedReceipt() {
+
+    if (!selectedPayment) {
+
+        showMessage(
+            "Please select a payment first.",
+            "error"
+        );
+
+        return;
+    }
+
+    openReceiptPDF(
+        selectedPayment.id
+    );
+}
+
+
+/* -------------------------
+   PRINT
+------------------------- */
+
+function printPreview() {
+
+    if (!selectedPayment) {
+
+        showMessage(
+            "Please select a payment first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const content =
+        document.getElementById(
+            "receiptPreview"
+        ).innerHTML;
+
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank",
+            "width=900,height=700"
+        );
+
+
+    printWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>Payment Receipt</title>
+
+            <style>
+
+                body {
+                    font-family: Arial, sans-serif;
+                    padding: 30px;
+                    color: #111;
+                }
+
+                .receipt-header {
+                    text-align: center;
+                    border-bottom: 2px solid #111;
+                    padding-bottom: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .receipt-header h2 {
+                    margin: 0;
+                }
+
+                .receipt-header p {
+                    margin: 5px;
+                }
+
+                .receipt-section {
+                    margin-bottom: 20px;
+                }
+
+                .receipt-section h3 {
+                    border-bottom: 1px solid #ddd;
+                    padding-bottom: 7px;
+                }
+
+                .receipt-grid {
+                    display: grid;
+                    grid-template-columns: 180px 1fr;
+                    border: 1px solid #ddd;
+                }
+
+                .receipt-grid div {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+                }
+
+                .receipt-grid div:nth-child(odd) {
+                    background: #f5f5f5;
+                    font-weight: bold;
+                }
+
+                .amount-box {
+                    border: 2px solid #111;
+                    padding: 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+
+                .receipt-actions {
+                    display: none;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            ${content}
+
+        </body>
+
+        </html>
+    `);
+
+
+    printWindow.document.close();
+
+
+    printWindow.onload = function() {
+
+        printWindow.focus();
+
+        printWindow.print();
+
+    };
+}
+
+
+/* -------------------------
+   CLEAR SEARCH
+------------------------- */
+
+function clearSearch() {
+
+    document.getElementById(
+        "studentId"
+    ).value = "";
+
+    document.getElementById(
+        "feeRecordId"
+    ).value = "";
+
+    loadPayments();
+}
+
+
+/* -------------------------
+   FORMAT MONEY
+------------------------- */
+
+function formatMoney(value) {
+
+    return "£" +
+        Number(value || 0).toLocaleString(
+            "en-GB",
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+}
+
+
+/* -------------------------
+   FORMAT DATE
+------------------------- */
+
+function formatDate(value) {
+
+    if (!value) {
+        return "-";
+    }
+
+    try {
+
+        const date =
+            new Date(value);
+
+        if (isNaN(date.getTime())) {
+            return String(value);
+        }
+
+        return date.toLocaleDateString(
+            "en-GB",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        );
+
+    } catch (error) {
+
+        return String(value);
+    }
+}
+
+
+/* -------------------------
+   ESCAPE HTML
+------------------------- */
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* -------------------------
+   START
+------------------------- */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        loadPayments();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

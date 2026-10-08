@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Classes - School Solution</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .container {
+            width: 100%;
+            padding: 25px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: #777;
+        }
+
+        .back-btn {
+            border: none;
+            background: #333;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            opacity: .85;
+        }
+
+        .toolbar {
+            background: white;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 220px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        button {
+            border: none;
+            padding: 11px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .add-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .form-card {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .form-card.active {
+            display: block;
+        }
+
+        .form-card h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .save-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .cancel-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .view-btn {
+            background: #0dcaf0;
+            color: #000;
+        }
+
+        .edit-btn {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .students-btn {
+            background: #6f42c1;
+            color: white;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 7px;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .success {
+            display: block;
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .error {
+            display: block;
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.5);
+            padding: 30px;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close {
+            background: #dc3545;
+            color: white;
+        }
+
+        .student-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .student-item strong {
+            display: block;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+
+        <div>
+            <h1>🏫 Classes</h1>
+            <p>Manage school classes</p>
+        </div>
+
+        <button class="back-btn" onclick="goDashboard()">
+            ← Dashboard
+        </button>
+
+    </div>
+
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search class or academic year..."
+            oninput="filterClasses()"
+        >
+
+        <button
+            class="add-btn"
+            onclick="openAddForm()"
+        >
+            ➕ Add Class
+        </button>
+
+        <button
+            class="refresh-btn"
+            onclick="loadClasses()"
+        >
+            🔄 Refresh
+        </button>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+    <div id="message" class="message"></div>
+
+
+    <!-- FORM -->
+    <div id="formCard" class="form-card">
+
+        <h2 id="formTitle">Add Class</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Class Name *</label>
+
+                <input
+                    type="text"
+                    id="className"
+                    placeholder="Example: Grade 1"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Academic Year *</label>
+
+                <input
+                    type="text"
+                    id="academicYear"
+                    placeholder="Example: 2026/2027"
+                >
+
+            </div>
+
+
+            <div class="form-group full">
+
+                <label>Description</label>
+
+                <textarea
+                    id="description"
+                    placeholder="Class description..."
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-buttons">
+
+            <button
+                class="save-btn"
+                onclick="saveClass()"
+            >
+                💾 Save Class
+            </button>
+
+            <button
+                class="cancel-btn"
+                onclick="closeForm()"
+            >
+                Cancel
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Class Name</th>
+
+                    <th>Academic Year</th>
+
+                    <th>Description</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="classesTable">
+
+                <tr>
+                    <td colspan="5" class="empty">
+                        Loading classes...
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- VIEW MODAL -->
+<div id="viewModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2>Class Details</h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div id="classDetails"></div>
+
+    </div>
+
+</div>
+
+
+<!-- STUDENTS MODAL -->
+<div id="studentsModal" class="modal">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h2 id="studentsTitle">
+                Students
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeStudentsModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div id="studentsList"></div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const API_URL = "http://127.0.0.1:8000";
+
+let classes = [];
+
+let editingId = null;
+
+
+// ======================================================
+// PAGE START
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadClasses();
+
+    }
+);
+
+
+// ======================================================
+// DASHBOARD
+// ======================================================
+
+function goDashboard() {
+
+    window.location.href = "dashboard.html";
+
+}
+
+
+// ======================================================
+// LOAD CLASSES
+// ======================================================
+
+async function loadClasses() {
+
+    const table =
+        document.getElementById("classesTable");
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5" class="empty">
+                Loading classes...
+            </td>
+        </tr>
+    `;
+
+    try {
+
+        const response =
+            await fetch(`${API_URL}/api/classes/`);
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Failed to load classes."
+            );
+
+        }
+
+        classes = await response.json();
+
+        renderClasses(classes);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    ❌ ${escapeHtml(error.message)}
+                </td>
+            </tr>
+        `;
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// RENDER CLASSES
+// ======================================================
+
+function renderClasses(data) {
+
+    const table =
+        document.getElementById("classesTable");
+
+    if (!data || data.length === 0) {
+
+        table.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty">
+                    No classes found.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML = data.map(function (item) {
+
+        return `
+
+            <tr>
+
+                <td>${item.id}</td>
+
+                <td>
+                    <strong>
+                        ${escapeHtml(item.name)}
+                    </strong>
+                </td>
+
+                <td>
+                    ${escapeHtml(item.academic_year)}
+                </td>
+
+                <td>
+                    ${escapeHtml(
+                        item.description || "-"
+                    )}
+                </td>
+
+                <td>
+
+                    <div class="actions">
+
+                        <button
+                            class="view-btn"
+                            onclick="viewClass(${item.id})"
+                        >
+                            👁 View
+                        </button>
+
+                        <button
+                            class="students-btn"
+                            onclick="viewStudents(${item.id})"
+                        >
+                            👨‍🎓 Students
+                        </button>
+
+                        <button
+                            class="edit-btn"
+                            onclick="editClass(${item.id})"
+                        >
+                            ✏️ Edit
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteClass(${item.id})"
+                        >
+                            🗑 Delete
+                        </button>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }).join("");
+
+}
+
+
+// ======================================================
+// SEARCH
+// ======================================================
+
+function filterClasses() {
+
+    const search =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    if (!search) {
+
+        renderClasses(classes);
+
+        return;
+
+    }
+
+
+    const filtered =
+        classes.filter(function (item) {
+
+            return (
+
+                String(item.id)
+                    .includes(search)
+
+                ||
+
+                item.name
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                item.academic_year
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                (item.description || "")
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+        });
+
+
+    renderClasses(filtered);
+
+}
+
+
+// ======================================================
+// OPEN ADD FORM
+// ======================================================
+
+function openAddForm() {
+
+    editingId = null;
+
+    document.getElementById(
+        "formTitle"
+    ).textContent = "Add Class";
+
+    document.getElementById(
+        "className"
+    ).value = "";
+
+    document.getElementById(
+        "academicYear"
+    ).value = "";
+
+    document.getElementById(
+        "description"
+    ).value = "";
+
+    document.getElementById(
+        "formCard"
+    ).classList.add("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ======================================================
+// CLOSE FORM
+// ======================================================
+
+function closeForm() {
+
+    editingId = null;
+
+    document.getElementById(
+        "formCard"
+    ).classList.remove("active");
+
+}
+
+
+// ======================================================
+// SAVE / UPDATE CLASS
+// ======================================================
+
+async function saveClass() {
+
+    const name =
+        document
+            .getElementById("className")
+            .value
+            .trim();
+
+    const academicYear =
+        document
+            .getElementById("academicYear")
+            .value
+            .trim();
+
+    const description =
+        document
+            .getElementById("description")
+            .value
+            .trim();
+
+
+    if (!name) {
+
+        showMessage(
+            "Please enter a class name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!academicYear) {
+
+        showMessage(
+            "Please enter the academic year.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const data = {
+
+        name: name,
+
+        academic_year: academicYear,
+
+        description: description
+
+    };
+
+
+    try {
+
+        let response;
+
+
+        if (editingId) {
+
+            response = await fetch(
+                `${API_URL}/api/classes/${editingId}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify(data)
+                }
+            );
+
+        }
+
+        else {
+
+            response = await fetch(
+                `${API_URL}/api/classes/`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify(data)
+                }
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to save class."
+            );
+
+        }
+
+
+        showMessage(
+            editingId
+                ? "Class updated successfully."
+                : "Class added successfully.",
+            "success"
+        );
+
+
+        closeForm();
+
+        await loadClasses();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// EDIT CLASS
+// ======================================================
+
+function editClass(id) {
+
+    const item =
+        classes.find(
+            c => c.id === id
+        );
+
+
+    if (!item) {
+
+        showMessage(
+            "Class not found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    editingId = id;
+
+
+    document.getElementById(
+        "formTitle"
+    ).textContent = "Edit Class";
+
+
+    document.getElementById(
+        "className"
+    ).value = item.name || "";
+
+
+    document.getElementById(
+        "academicYear"
+    ).value =
+        item.academic_year || "";
+
+
+    document.getElementById(
+        "description"
+    ).value =
+        item.description || "";
+
+
+    document.getElementById(
+        "formCard"
+    ).classList.add("active");
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ======================================================
+// VIEW CLASS
+// ======================================================
+
+async function viewClass(id) {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/classes/${id}`
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to load class."
+            );
+
+        }
+
+
+        document.getElementById(
+            "classDetails"
+        ).innerHTML = `
+
+            <p>
+                <strong>ID:</strong>
+                ${result.id}
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Class Name:</strong>
+                ${escapeHtml(result.name)}
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Academic Year:</strong>
+                ${escapeHtml(result.academic_year)}
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Description:</strong>
+                ${escapeHtml(
+                    result.description || "-"
+                )}
+            </p>
+
+        `;
+
+
+        document.getElementById(
+            "viewModal"
+        ).classList.add("active");
+
+    }
+
+    catch (error) {
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// DELETE CLASS
+// ======================================================
+
+async function deleteClass(id) {
+
+    const item =
+        classes.find(
+            c => c.id === id
+        );
+
+
+    if (!item) return;
+
+
+    const confirmed =
+        confirm(
+            `Delete "${item.name}" for ${item.academic_year}?\n\n` +
+            `A class cannot be deleted if active students are assigned to it.`
+        );
+
+
+    if (!confirmed) return;
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/classes/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to delete class."
+            );
+
+        }
+
+
+        showMessage(
+            "Class deleted successfully.",
+            "success"
+        );
+
+
+        await loadClasses();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        showMessage(
+            error.message,
+            "error"
+        );
+
+    }
+
+}
+
+
+// ======================================================
+// VIEW STUDENTS
+// ======================================================
+
+async function viewStudents(id) {
+
+    const list =
+        document.getElementById(
+            "studentsList"
+        );
+
+    list.innerHTML =
+        "<p>Loading students...</p>";
+
+
+    document.getElementById(
+        "studentsModal"
+    ).classList.add("active");
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/api/classes/${id}/students`
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                result.detail ||
+                "Unable to load students."
+            );
+
+        }
+
+
+        document.getElementById(
+            "studentsTitle"
+        ).textContent =
+            `${result.class_name} - Students (${result.student_count})`;
+
+
+        if (
+            !result.students ||
+            result.students.length === 0
+        ) {
+
+            list.innerHTML = `
+                <div class="empty">
+                    No active students are assigned
+                    to this class.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            result.students.map(
+                function(student) {
+
+                    return `
+
+                        <div class="student-item">
+
+                            <strong>
+                                ${escapeHtml(
+                                    student.first_name
+                                )}
+                                ${escapeHtml(
+                                    student.last_name
+                                )}
+                            </strong>
+
+                            <span>
+                                Student ID:
+                                ${escapeHtml(
+                                    student.student_id
+                                )}
+                            </span>
+
+                            <br>
+
+                            <span>
+                                Gender:
+                                ${escapeHtml(
+                                    student.gender || "-"
+                                )}
+                            </span>
+
+                        </div>
+
+                    `;
+
+                }
+            ).join("");
+
+    }
+
+    catch (error) {
+
+        list.innerHTML = `
+            <div class="empty">
+                ❌ ${escapeHtml(error.message)}
+            </div>
+        `;
+
+    }
+
+}
+
+
+// ======================================================
+// CLOSE VIEW MODAL
+// ======================================================
+
+function closeModal() {
+
+    document.getElementById(
+        "viewModal"
+    ).classList.remove("active");
+
+}
+
+
+// ======================================================
+// CLOSE STUDENTS MODAL
+// ======================================================
+
+function closeStudentsModal() {
+
+    document.getElementById(
+        "studentsModal"
+    ).classList.remove("active");
+
+}
+
+
+// ======================================================
+// MESSAGE
+// ======================================================
+
+function showMessage(message, type) {
+
+    const element =
+        document.getElementById("message");
+
+
+    element.textContent = message;
+
+    element.className =
+        `message ${type}`;
+
+
+    setTimeout(function () {
+
+        element.className =
+            "message";
+
+    }, 5000);
+
+}
+
+
+// ======================================================
+// HTML ESCAPE
+// ======================================================
+
+function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+</script>
+
+</body>
+</html>

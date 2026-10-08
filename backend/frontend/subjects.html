@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>School Solution - Subjects</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #1f2937;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #172554;
+            color: white;
+            padding: 20px 15px;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            padding: 15px 5px 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            margin-bottom: 15px;
+        }
+
+        .logo h2 {
+            font-size: 21px;
+        }
+
+        .logo p {
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+
+        .menu {
+            list-style: none;
+        }
+
+        .menu li {
+            margin: 5px 0;
+        }
+
+        .menu button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: white;
+            padding: 13px 15px;
+            text-align: left;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .menu button:hover,
+        .menu button.active {
+            background: #2563eb;
+        }
+
+        .menu-icon {
+            display: inline-block;
+            width: 28px;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            font-size: 23px;
+        }
+
+        .logout-btn {
+            border: none;
+            background: #dc2626;
+            color: white;
+            padding: 9px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        /* BUTTONS */
+
+        .primary-button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .primary-button:hover {
+            background: #1d4ed8;
+        }
+
+        .secondary-button {
+            border: none;
+            background: #e5e7eb;
+            color: #111827;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .secondary-button:hover {
+            background: #d1d5db;
+        }
+
+        .small-button {
+            border: none;
+            background: #2563eb;
+            color: white;
+            padding: 7px 11px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .small-button.danger {
+            background: #dc2626;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            margin-bottom: 5px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+        }
+
+        /* PANEL */
+
+        .panel {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.07);
+        }
+
+        /* TOOLBAR */
+
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #f8fafc;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-field.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-field label {
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        .form-field textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-field input:focus,
+        .form-field textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .form-message {
+            margin-top: 15px;
+        }
+
+        .form-message.error {
+            padding: 10px;
+            color: #991b1b;
+            background: #fee2e2;
+            border-radius: 6px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state div {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .toolbar {
+                flex-direction: column;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-field.full-width {
+                grid-column: auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <h2>
+            🏫 School Solution
+        </h2>
+
+        <p>
+            መፍትሕ
+        </p>
+
+    </div>
+
+
+    <ul class="menu">
+
+        <li>
+            <button onclick="go('dashboard.html')">
+                <span class="menu-icon">🏠</span>
+                Dashboard
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('students.html')">
+                <span class="menu-icon">👨‍🎓</span>
+                Students
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('classes.html')">
+                <span class="menu-icon">🏫</span>
+                Classes
+            </button>
+        </li>
+
+        <li>
+            <button class="active">
+                <span class="menu-icon">📚</span>
+                Subjects
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('teachers.html')">
+                <span class="menu-icon">👨‍🏫</span>
+                Teachers
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('marks.html')">
+                <span class="menu-icon">📝</span>
+                Marks / Grades
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('attendance.html')">
+                <span class="menu-icon">📅</span>
+                Attendance
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('fees.html')">
+                <span class="menu-icon">💰</span>
+                Fees
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('receipts.html')">
+                <span class="menu-icon">🧾</span>
+                Receipts
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('reports.html')">
+                <span class="menu-icon">📊</span>
+                Reports
+            </button>
+        </li>
+
+        <li>
+            <button onclick="go('settings.html')">
+                <span class="menu-icon">⚙️</span>
+                School Settings
+            </button>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="main">
+
+
+    <header class="topbar">
+
+        <h1>
+            Subjects
+        </h1>
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <section
+        class="content"
+        id="contentArea"
+    >
+
+        Loading Subjects...
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<script>
+
+function go(page) {
+
+    window.location.href = page;
+
+}
+
+
+function logout() {
+
+    localStorage.removeItem(
+        "school_token"
+    );
+
+    localStorage.removeItem(
+        "school_user"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
+</script>
+
+
+<!-- =========================================================
+     MAIN APP JAVASCRIPT
+========================================================= -->
+
+<script src="app.js"></script>
+
+
+<!-- =========================================================
+     LOAD SUBJECTS
+========================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        loadSubjects();
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
