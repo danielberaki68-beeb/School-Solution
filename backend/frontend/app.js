@@ -2,7 +2,7 @@
 // SCHOOL SOLUTION - MAIN APP.JS
 // ============================================================
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "";
 
 const TOKEN_KEY = "school_token";
 const USER_KEY = "school_user";
