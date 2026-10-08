@@ -1,9 +1,19 @@
+# ============================================================
+# SCHOOL SOLUTION / መፍትሕ
+# FastAPI Backend
+# ============================================================
+
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
-from .database import Base, engine
 
-from .routes.grades import router as grades_router
+# ============================================================
+# ROUTERS
+# ============================================================
+
 from .routes.students import router as students_router
 from .routes.classes import router as classes_router
 from .routes.subjects import router as subjects_router
@@ -17,32 +27,18 @@ from .routes.auth import router as auth_router
 
 
 # ============================================================
-# CREATE DATABASE TABLES
-# ============================================================
-
-Base.metadata.create_all(bind=engine)
-
-
-# ============================================================
-# FASTAPI APPLICATION
+# APPLICATION
 # ============================================================
 
 app = FastAPI(
     title="School Solution / መፍትሕ",
-    description="Professional School Management System",
-    version="1.0.0"
+    description="School Solution / መፍትሕ - School Management System",
+    version="1.0.0",
 )
 
 
 # ============================================================
 # CORS
-# ============================================================
-#
-# This allows the HTML/CSS/JavaScript frontend to communicate
-# with the FastAPI backend.
-#
-# For development this allows all origins.
-# We can restrict this before production deployment.
 # ============================================================
 
 app.add_middleware(
@@ -55,21 +51,6 @@ app.add_middleware(
 
 
 # ============================================================
-# ROOT
-# ============================================================
-
-@app.get("/")
-def root():
-    return {
-        "message": "School Solution / መፍትሕ API is running",
-        "app": "School Solution",
-        "name_tigrinya": "መፍትሕ",
-        "version": "1.0.0",
-        "docs": "/docs"
-    }
-
-
-# ============================================================
 # HEALTH CHECK
 # ============================================================
 
@@ -79,16 +60,28 @@ def health_check():
         "status": "ok",
         "app": "School Solution",
         "name_tigrinya": "መፍትሕ",
-        "version": "1.0.0"
+        "version": "1.0.0",
     }
 
 
 # ============================================================
-# REGISTER ROUTERS
+# API INFORMATION
 # ============================================================
 
-# Grading System
-app.include_router(grades_router)
+@app.get("/api")
+def api_information():
+    return {
+        "message": "School Solution / መፍትሕ API is running",
+        "app": "School Solution",
+        "name_tigrinya": "መፍትሕ",
+        "version": "1.0.0",
+        "docs": "/docs",
+    }
+
+
+# ============================================================
+# ROUTERS
+# ============================================================
 
 # Students
 app.include_router(students_router)
@@ -119,3 +112,54 @@ app.include_router(receipts_router)
 
 # Authentication
 app.include_router(auth_router)
+
+
+# ============================================================
+# FRONTEND
+# ============================================================
+
+FRONTEND_DIR = Path(__file__).resolve().parent / "frontend"
+
+
+if not FRONTEND_DIR.exists():
+    print(
+        f"WARNING: Frontend directory not found: {FRONTEND_DIR}"
+    )
+else:
+    print(
+        f"Frontend directory: {FRONTEND_DIR}"
+    )
+
+
+# ============================================================
+# FRONTEND FILES
+# ============================================================
+#
+# This serves:
+#
+# /index.html
+# /dashboard.html
+# /students.html
+# /classes.html
+# /subjects.html
+# /teachers.html
+# /marks.html
+# /attendance.html
+# /fees.html
+# /receipts.html
+# /reports.html
+# /settings.html
+# /about.html
+# /app.js
+# /style.css
+#
+# ============================================================
+
+app.mount(
+    "/",
+    StaticFiles(
+        directory=str(FRONTEND_DIR),
+        html=True,
+    ),
+    name="frontend",
+)
