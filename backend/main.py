@@ -8,6 +8,8 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from .database import Base, engine
+from . import models
 
 
 # ============================================================
@@ -34,6 +36,9 @@ app = FastAPI(
     title="School Solution / መፍትሕ",
     description="School Solution / መፍትሕ - School Management System",
     version="1.0.0",
+    @app.on_event("startup")
+def initialize_database():
+    Base.metadata.create_all(bind=engine)
 )
 
 
