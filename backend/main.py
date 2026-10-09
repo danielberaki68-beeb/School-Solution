@@ -36,11 +36,12 @@ app = FastAPI(
     title="School Solution / መፍትሕ",
     description="School Solution / መፍትሕ - School Management System",
     version="1.0.0",
-    @app.on_event("startup")
-def initialize_database():
-    Base.metadata.create_all(bind=engine)
 )
 
+
+@app.on_event("startup")
+def initialize_database():
+    Base.metadata.create_all(bind=engine)
 
 # ============================================================
 # CORS
